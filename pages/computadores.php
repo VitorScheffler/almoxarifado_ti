@@ -173,7 +173,7 @@ if (isset($_GET['del'])) {
                         </li>
                     </ul>
                 </li>
-
+                
                 <li class="nav-item">
                     <a class="nav-link" href="entrada.php">
                         <i class="bi bi-box-arrow-in-down"></i> Entradas
