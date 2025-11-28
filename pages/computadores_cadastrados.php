@@ -11,6 +11,15 @@ function limparDados($dado)
     return $dado;
 }
 
+// Buscar setores da tabela setor
+$setores = [];
+try {
+    $stmt = $pdo->query("SELECT id, setor FROM setor ORDER BY setor");
+    $setores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $erro = "Erro ao buscar setores: " . $e->getMessage();
+}
+
 $id_edit = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
 $computador = null;
 
@@ -29,7 +38,7 @@ if ($id_edit > 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $setor = limparDados($_POST['setor'] ?? '');
+    $setor_id = intval($_POST['setor_id'] ?? 0);
     $patrimonio_computador = limparDados($_POST['patrimonio_computador'] ?? '');
     $patrimonio_monitor1 = limparDados($_POST['patrimonio_monitor1'] ?? '');
     $patrimonio_monitor2 = limparDados($_POST['patrimonio_monitor2'] ?? '');
@@ -37,12 +46,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observacoes = limparDados($_POST['observacoes'] ?? '');
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
-    if (empty($setor)) {
+    // Buscar nome do setor baseado no ID
+    $setor_nome = '';
+    if ($setor_id > 0) {
+        try {
+            $stmt = $pdo->prepare("SELECT setor FROM setor WHERE id = ?");
+            $stmt->execute([$setor_id]);
+            $setor_data = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($setor_data) {
+                $setor_nome = $setor_data['setor'];
+            }
+        } catch (PDOException $e) {
+            $erro = "Erro ao buscar setor: " . $e->getMessage();
+        }
+    }
+
+    if ($setor_id <= 0) {
         $erro = "O campo setor é obrigatório.";
     } elseif (empty($patrimonio_computador)) {
         $erro = "O campo patrimônio do computador é obrigatório.";
-    } elseif (strlen($setor) > 100) {
-        $erro = "O setor deve ter no máximo 100 caracteres.";
     } elseif (strlen($patrimonio_computador) > 100) {
         $erro = "O patrimônio do computador deve ter no máximo 100 caracteres.";
     } else {
@@ -54,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $erro = "Já existe um computador cadastrado com este patrimônio.";
                 } else {
                     $stmt = $pdo->prepare("UPDATE computadores SET setor=?, patrimonio_computador=?, patrimonio_monitor1=?, patrimonio_monitor2=?, usuario=?, observacoes=? WHERE id=?");
-                    $stmt->execute([$setor, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes, $id]);
+                    $stmt->execute([$setor_nome, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes, $id]);
                     $sucesso = "Computador atualizado com sucesso!";
                     $id_edit = 0;
                 }
@@ -65,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $erro = "Já existe um computador cadastrado com este patrimônio.";
                 } else {
                     $stmt = $pdo->prepare("INSERT INTO computadores (setor, patrimonio_computador, patrimonio_monitor1, patrimonio_monitor2, usuario, observacoes) VALUES (?, ?, ?, ?, ?, ?)");
-                    $stmt->execute([$setor, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes]);
+                    $stmt->execute([$setor_nome, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes]);
                     $sucesso = "Computador cadastrado com sucesso!";
                 }
             }
@@ -232,9 +254,16 @@ try {
 
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="setor" class="form-label">Setor *</label>
-                                    <input type="text" class="form-control" id="setor" name="setor" required
-                                        value="<?= htmlspecialchars($computador['setor']) ?>">
+                                    <label for="setor_id" class="form-label">Setor *</label>
+                                    <select class="form-select" id="setor_id" name="setor_id" required>
+                                        <option value="">-- Selecione o Setor --</option>
+                                        <?php foreach ($setores as $setor): ?>
+                                            <option value="<?= $setor['id'] ?>" 
+                                                <?= ($computador['setor'] === $setor['setor']) ? 'selected' : '' ?>>
+                                                <?= htmlspecialchars($setor['setor']) ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
 
                                 <div class="col-md-6">
