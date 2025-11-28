@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
             $conexao = ldap_connect("ldap://192.168.0.6:389");
             if (!$conexao) {
-                throw new Exception("N�o foi poss�vel conectar ao servidor LDAP.");
+                throw new Exception("Não foi possível conectar ao servidor LDAP.");
             }
 
             ldap_set_option($conexao, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -34,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (!$bind) {
                 $error_code = ldap_errno($conexao);
                 $mensagem = ($error_code == 0x31)
-                    ? "Usu�rio ou senha inv�lidos."
-                    : "Erro na autentica��o. C�digo: $error_code";
+                    ? "Usuário ou senha inválidos."
+                    : "Erro na autenticação. Código: $error_code";
             } else {
                 $base_dn         = "DC=coopershoes,DC=com,DC=br";
                 $grupo_permitido = "CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,"
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header("Location: /");
                     exit;
                 } else {
-                    $mensagem = "Acesso negado: voc� n�o pertence ao grupo autorizado (TI).";
+                    $mensagem = "Acesso negado: você não pertence ao grupo autorizado (TI).";
                 }
             }
 
