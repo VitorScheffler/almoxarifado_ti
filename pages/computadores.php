@@ -11,6 +11,32 @@ function limparDados($dado)
     return $dado;
 }
 
+// Buscar setores disponíveis
+$setores = [];
+try {
+    $stmt = $pdo->query("SELECT DISTINCT setor FROM computadores WHERE setor IS NOT NULL AND setor != '' ORDER BY setor");
+    $setores = $stmt->fetchAll(PDO::FETCH_COLUMN);
+} catch (PDOException $e) {
+    $erro = "Erro ao buscar setores: " . $e->getMessage();
+}
+
+// Adicionar setores padrão caso não existam muitos
+if (empty($setores)) {
+    $setores = [
+        'Administração',
+        'Almoxarifado',
+        'Compras',
+        'Contabilidade',
+        'Diretoria',
+        'Financeiro',
+        'Marketing',
+        'Produção',
+        'Recursos Humanos',
+        'TI',
+        'Vendas'
+    ];
+}
+
 $id_edit = isset($_GET['edit']) ? intval($_GET['edit']) : 0;
 $computador = null;
 
@@ -225,8 +251,15 @@ if (isset($_GET['del'])) {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="setor" class="form-label">Setor *</label>
-                                <input type="text" class="form-control" id="setor" name="setor" required
-                                    value="<?= htmlspecialchars($computador['setor'] ?? '') ?>">
+                                <select class="form-select" id="setor" name="setor" required>
+                                    <option value="">-- Selecione o Setor --</option>
+                                    <?php foreach ($setores as $setor_option): ?>
+                                        <option value="<?= htmlspecialchars($setor_option) ?>" 
+                                            <?= (isset($computador['setor']) && $computador['setor'] === $setor_option) ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($setor_option) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
 
                             <div class="col-md-6">
