@@ -300,15 +300,15 @@ ob_start();
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a href="?edit=<?= $f['id'] ?>" 
-                                            class="btn btn-warning"
-                                            title="Editar">
+                                        <a href="?edit=<?= $c['id'] ?>" 
+                                        class="btn btn-warning"
+                                        title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a href="?del=<?= $f['id'] ?>" 
-                                            class="btn btn-danger" 
-                                            onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')"
-                                            title="Excluir">
+                                        <a href="?del=<?= $c['id'] ?>" 
+                                        class="btn btn-danger" 
+                                        onclick="return confirm('Tem certeza que deseja excluir este computador?')"
+                                        title="Excluir">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
