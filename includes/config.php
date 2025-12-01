@@ -21,7 +21,7 @@ try {
 }
 
 if (!isset($_SESSION['usuario']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
-    header("Location: auth/login.php");
+    header("Location: ../auth/login.php");
     exit();
 }
 ?>
