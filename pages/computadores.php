@@ -1,4 +1,5 @@
 <?php
+$pagina_atual = 'computadores.php';
 require '../includes/config.php';
 
 $erro = '';
@@ -113,161 +114,139 @@ if (isset($_GET['del'])) {
         $erro = "Erro ao excluir computador: " . $e->getMessage();
     }
 }
+
+// Captura o conteúdo HTML
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0"><?= $id_edit ? 'Editar Computador' : 'Cadastrar Computadores' ?></h2>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado TI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-
-<body>
-    <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
-
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0"><?= $id_edit ? 'Editar Computador' : 'Cadastrar Computadores' ?></h2>
-            </div>
-
-            <?php if ($erro): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= $erro ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($sucesso): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?= $sucesso ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><?= $id_edit ? 'Editar Computador' : 'Cadastrar Novo Computador' ?></h5>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        <input type="hidden" name="id" value="<?= $computador['id'] ?? '' ?>">
-
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="setor_id" class="form-label">Setor *</label>
-                                <select class="form-select" 
-                                        id="setor_id" 
-                                        name="setor_id" 
-                                        required>
-                                    <option value="">-- Selecione o Setor --</option>
-                                    <?php foreach ($setores as $setor): ?>
-                                        <option value="<?= $setor['id'] ?>" 
-                                            <?= (isset($computador['setor']) && $computador['setor'] === $setor['setor']) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($setor['setor']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="patrimonio_computador" 
-                                       name="patrimonio_computador" 
-                                       required
-                                       inputmode="numeric"
-                                       pattern="[0-9]*"
-                                       value="<?= htmlspecialchars($computador['patrimonio_computador'] ?? '') ?>"
-                                       placeholder="000000"
-                                       title="Digite apenas números">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="patrimonio_monitor1" 
-                                       name="patrimonio_monitor1"
-                                       inputmode="numeric"
-                                       pattern="[0-9]*"
-                                       value="<?= htmlspecialchars($computador['patrimonio_monitor1'] ?? '') ?>"
-                                       placeholder="000000"
-                                       title="Digite apenas números">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="patrimonio_monitor2" 
-                                       name="patrimonio_monitor2"
-                                       inputmode="numeric"
-                                       pattern="[0-9]*"
-                                       value="<?= htmlspecialchars($computador['patrimonio_monitor2'] ?? '') ?>"
-                                       placeholder="000000"
-                                       title="Digite apenas números">
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="usuario" class="form-label">Usuário</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="usuario" 
-                                       name="usuario"
-                                       value="<?= htmlspecialchars($computador['usuario'] ?? '') ?>"
-                                       placeholder="Nome do usuário">
-                            </div>
-
-                            <div class="col-12">
-                                <label for="observacoes" class="form-label">Observações</label>
-                                <textarea class="form-control" 
-                                          id="observacoes" 
-                                          name="observacoes" 
-                                          rows="3"
-                                          placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-save"></i> <?= $id_edit ? 'Atualizar' : 'Cadastrar' ?>
-                                </button>
-                                <button type="reset" class="btn btn-danger">
-                                    <i class="bi bi-x-circle"></i> Limpar
-                                </button>
-                                <?php if ($id_edit): ?>
-                                    <a href="computadores.php" class="btn btn-secondary">
-                                        <i class="bi bi-x"></i> Cancelar
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<?php if ($erro): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= $erro ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
     </div>
+<?php endif; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function () {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-    </script>
-</body>
+<?php if ($sucesso): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $sucesso ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-</html>
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><?= $id_edit ? 'Editar Computador' : 'Cadastrar Novo Computador' ?></h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <input type="hidden" name="id" value="<?= $computador['id'] ?? '' ?>">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="setor_id" class="form-label">Setor *</label>
+                    <select class="form-select" 
+                            id="setor_id" 
+                            name="setor_id" 
+                            required>
+                        <option value="">-- Selecione o Setor --</option>
+                        <?php foreach ($setores as $setor): ?>
+                            <option value="<?= $setor['id'] ?>" 
+                                <?= (isset($computador['setor']) && $computador['setor'] === $setor['setor']) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($setor['setor']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="patrimonio_computador" 
+                           name="patrimonio_computador" 
+                           required
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="<?= htmlspecialchars($computador['patrimonio_computador'] ?? '') ?>"
+                           placeholder="000000"
+                           title="Digite apenas números">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="patrimonio_monitor1" 
+                           name="patrimonio_monitor1"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="<?= htmlspecialchars($computador['patrimonio_monitor1'] ?? '') ?>"
+                           placeholder="000000"
+                           title="Digite apenas números">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="patrimonio_monitor2" 
+                           name="patrimonio_monitor2"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           value="<?= htmlspecialchars($computador['patrimonio_monitor2'] ?? '') ?>"
+                           placeholder="000000"
+                           title="Digite apenas números">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="usuario" class="form-label">Usuário</label>
+                    <input type="text" 
+                           class="form-control" 
+                           id="usuario" 
+                           name="usuario"
+                           value="<?= htmlspecialchars($computador['usuario'] ?? '') ?>"
+                           placeholder="Nome do usuário">
+                </div>
+
+                <div class="col-12">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea class="form-control" 
+                              id="observacoes" 
+                              name="observacoes" 
+                              rows="3"
+                              placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> <?= $id_edit ? 'Atualizar' : 'Cadastrar' ?>
+                    </button>
+                    <button type="reset" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Limpar
+                    </button>
+                    <?php if ($id_edit): ?>
+                        <a href="computadores.php" class="btn btn-secondary">
+                            <i class="bi bi-x"></i> Cancelar
+                        </a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<?php
+$conteudo = ob_get_clean();
+$titulo = $id_edit ? "Editar Computador - Almoxarifado TI" : "Cadastrar Computadores - Almoxarifado TI";
+
+include '../includes/template.php';

@@ -1,4 +1,5 @@
 <?php
+$pagina_atual = 'entrada.php';
 require '../includes/config.php';
 date_default_timezone_set('America/Sao_Paulo');
 
@@ -59,222 +60,204 @@ $stmt->bindValue(':limit', $items_per_page, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $entradas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+ob_start();
 ?>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Registrar Entrada de Itens</h2>
+</div>
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado TI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
-    <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
+<?php if ($sucesso): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> Entrada registrada com sucesso!
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-        <div class="main-content p-4" style="flex-grow:1;">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Registrar Entrada de Itens</h2>
-            </div>
+<?php if ($erro): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> <?= htmlspecialchars($erro) ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-            <?php if ($sucesso): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle"></i> Entrada registrada com sucesso!
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Dados da Entrada</h5>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="item_id" class="form-label">Item *</label>
+                    <select name="item_id" 
+                            id="item_id" 
+                            class="form-select" 
+                            required>
+                        <option value="">-- Selecione o item --</option>
+                        <?php foreach ($itens as $i): ?>
+                            <option value="<?= $i['id'] ?>">
+                                <?= htmlspecialchars($i['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="quantidade" class="form-label">Quantidade *</label>
+                    <input type="number" 
+                           name="quantidade" 
+                           id="quantidade" 
+                           min="1" 
+                           class="form-control" 
+                           required
+                           inputmode="numeric"
+                           placeholder="Quantidade">
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="fornecedor_id" class="form-label">Fornecedor *</label>
+                    <select name="fornecedor_id" 
+                            id="fornecedor_id" 
+                            class="form-select" 
+                            required>
+                        <option value="">-- Selecione o fornecedor --</option>
+                        <?php foreach ($fornecedores as $f): ?>
+                            <option value="<?= $f['id'] ?>">
+                                <?= htmlspecialchars($f['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="data_hora" class="form-label">Data e Hora</label>
+                    <input type="datetime-local" 
+                           name="data_hora" 
+                           id="data_hora" 
+                           class="form-control" 
+                           value="<?= date('Y-m-d\TH:i') ?>">
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="nota_fiscal" class="form-label">Nota Fiscal *</label>
+                    <input type="text" 
+                           name="nota_fiscal" 
+                           id="nota_fiscal" 
+                           class="form-control" 
+                           required
+                           placeholder="Número da nota fiscal">
+                </div>
+                
+                <div class="col-md-6">
+                    <label for="observacoes" class="form-label">Observações</label>
+                    <textarea name="observacoes" 
+                              id="observacoes" 
+                              class="form-control" 
+                              rows="1"
+                              placeholder="Observações sobre a entrada (opcional)"></textarea>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-box-arrow-in-down"></i> Registrar Entrada
+                    </button>
+                    <button type="reset" class="btn btn-danger">
+                        <i class="bi bi-x-circle"></i> Limpar
                     </button>
                 </div>
-            <?php endif; ?>
-            
-            <?php if ($erro): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i> <?= htmlspecialchars($erro) ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-            
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Dados da Entrada</h5>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="item_id" class="form-label">Item *</label>
-                                <select name="item_id" 
-                                        id="item_id" 
-                                        class="form-select" 
-                                        required>
-                                    <option value="">-- Selecione o item --</option>
-                                    <?php foreach ($itens as $i): ?>
-                                        <option value="<?= $i['id'] ?>">
-                                            <?= htmlspecialchars($i['nome']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label for="quantidade" class="form-label">Quantidade *</label>
-                                <input type="number" 
-                                       name="quantidade" 
-                                       id="quantidade" 
-                                       min="1" 
-                                       class="form-control" 
-                                       required
-                                       inputmode="numeric"
-                                       placeholder="Quantidade">
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label for="fornecedor_id" class="form-label">Fornecedor *</label>
-                                <select name="fornecedor_id" 
-                                        id="fornecedor_id" 
-                                        class="form-select" 
-                                        required>
-                                    <option value="">-- Selecione o fornecedor --</option>
-                                    <?php foreach ($fornecedores as $f): ?>
-                                        <option value="<?= $f['id'] ?>">
-                                            <?= htmlspecialchars($f['nome']) ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="data_hora" class="form-label">Data e Hora</label>
-                                <input type="datetime-local" 
-                                       name="data_hora" 
-                                       id="data_hora" 
-                                       class="form-control" 
-                                       value="<?= date('Y-m-d\TH:i') ?>">
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label for="nota_fiscal" class="form-label">Nota Fiscal *</label>
-                                <input type="text" 
-                                       name="nota_fiscal" 
-                                       id="nota_fiscal" 
-                                       class="form-control" 
-                                       required
-                                       placeholder="Número da nota fiscal">
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label for="observacoes" class="form-label">Observações</label>
-                                <textarea name="observacoes" 
-                                          id="observacoes" 
-                                          class="form-control" 
-                                          rows="1"
-                                          placeholder="Observações sobre a entrada (opcional)"></textarea>
-                            </div>
-
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-box-arrow-in-down"></i> Registrar Entrada
-                                </button>
-                                <button type="reset" class="btn btn-danger">
-                                    <i class="bi bi-x-circle"></i> Limpar
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
+        </form>
+    </div>
+</div>
 
-            <div class="card mt-4">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Últimas Entradas</h5>
-                        <span class="badge bg-primary">Total: <?= $total_items ?> registros</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <?php if ($entradas): ?>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Item</th>
-                                        <th>Quantidade</th>
-                                        <th>Fornecedor</th>
-                                        <th>Nota Fiscal</th>
-                                        <th>Data/Hora</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($entradas as $entrada): ?>
-                                        <tr>
-                                            <td><?= htmlspecialchars($entrada['item_nome']) ?></td>
-                                            <td>
-                                                <span class="badge bg-success">
-                                                    <?= htmlspecialchars($entrada['quantidade']) ?>
-                                                </span>
-                                            </td>
-                                            <td><?= htmlspecialchars($entrada['fornecedor']) ?></td>
-                                            <td><?= htmlspecialchars($entrada['nota_fiscal']) ?></td>
-                                            <td><?= date('d/m/Y H:i', strtotime($entrada['data_hora'])) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <nav class="mt-3">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page - 1 ?>">
-                                        <i class="bi bi-chevron-left"></i> Anterior
-                                    </a>
-                                </li>
-
-                                <?php for ($p = 1; $p <= $total_pages; $p++): ?>
-                                    <li class="page-item <?= ($p == $page) ? 'active' : '' ?>">
-                                        <a class="page-link" href="?page=<?= $p ?>"><?= $p ?></a>
-                                    </li>
-                                <?php endfor; ?>
-
-                                <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $page + 1 ?>">
-                                        Próximo <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    <?php else: ?>
-                        <div class="alert alert-info mb-0">
-                            <i class="bi bi-info-circle"></i> Nenhuma entrada registrada ainda.
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
+<div class="card mt-4">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Últimas Entradas</h5>
+            <span class="text-muted">Total: <?= $total_items ?> registros</span>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            const dataHoraInput = document.getElementById('data_hora');
-            if (dataHoraInput && !dataHoraInput.value) {
-                const now = new Date();
-                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-                dataHoraInput.value = now.toISOString().slice(0, 16);
-            }
-        });
-    </script>
-</body>
-</html>
+    <div class="card-body">
+        <?php if ($entradas): ?>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantidade</th>
+                            <th>Fornecedor</th>
+                            <th>Nota Fiscal</th>
+                            <th>Data/Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($entradas as $entrada): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($entrada['item_nome']) ?></td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <?= htmlspecialchars($entrada['quantidade']) ?>
+                                    </span>
+                                </td>
+                                <td><?= htmlspecialchars($entrada['fornecedor']) ?></td>
+                                <td><?= htmlspecialchars($entrada['nota_fiscal']) ?></td>
+                                <td><?= date('d/m/Y H:i', strtotime($entrada['data_hora'])) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <nav class="mt-3">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>">
+                            <i class="bi bi-chevron-left"></i> Anterior
+                        </a>
+                    </li>
+
+                    <?php for ($p = 1; $p <= $total_pages; $p++): ?>
+                        <li class="page-item <?= ($p == $page) ? 'active' : '' ?>">
+                            <a class="page-link" href="?page=<?= $p ?>"><?= $p ?></a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>">
+                            Próximo <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        <?php else: ?>
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i> Nenhuma entrada registrada ainda.
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dataHoraInput = document.getElementById('data_hora');
+    if (dataHoraInput && !dataHoraInput.value) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dataHoraInput.value = now.toISOString().slice(0, 16);
+    }
+});
+</script>
+<?php
+$conteudo = ob_get_clean();
+$titulo = "Registrar Entrada - Almoxarifado TI";
+
+include '../includes/template.php';

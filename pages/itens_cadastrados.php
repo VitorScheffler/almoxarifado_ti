@@ -1,4 +1,5 @@
 <?php
+$pagina_atual = 'itens_cadastrados.php';
 require '../includes/config.php';
 
 $erro = '';
@@ -46,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observacoes = limparDados($_POST['observacoes'] ?? '');
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
-    // Validações
     if (empty($nome)) {
         $erro = "O campo nome é obrigatório.";
     } elseif (strlen($nome) > 100) {
@@ -98,7 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if (isset($_GET['del'])) {
     $id_del = intval($_GET['del']);
     try {
-        // Verificar se o item tem estoque ou movimentações antes de excluir
         $stmt = $pdo->prepare("SELECT quantidade_atual FROM itens WHERE id = ?");
         $stmt->execute([$id_del]);
         $item_check = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -106,7 +105,6 @@ if (isset($_GET['del'])) {
         if ($item_check && $item_check['quantidade_atual'] > 0) {
             $erro = "Não é possível excluir o item. Ainda há {$item_check['quantidade_atual']} unidades em estoque.";
         } else {
-            // Verificar se há entradas ou saídas associadas
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM entradas WHERE item_id = ?");
             $stmt->execute([$id_del]);
             $entradas_count = $stmt->fetchColumn();
@@ -148,289 +146,273 @@ try {
     $itens = [];
 }
 
-// Buscar categorias existentes para o select
 $categorias_existentes = [];
 try {
     $stmt = $pdo->query("SELECT DISTINCT categoria FROM itens WHERE categoria IS NOT NULL AND categoria != '' ORDER BY categoria");
     $categorias_existentes = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 } catch (PDOException $e) {
-    // Ignorar erro, continuar com array vazio
 }
+
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado TI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
-    <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Itens Cadastrados</h2>
+</div>
 
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Itens Cadastrados</h2>
-            </div>
+<?php if ($erro): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> <?= $erro ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-            <?php if ($erro): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i> <?= $erro ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
+<?php if ($sucesso): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> <?= $sucesso ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-            <?php if ($sucesso): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle"></i> <?= $sucesso ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($id_edit > 0 && $item): ?>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Editar Item</h5>
+<?php if ($id_edit > 0 && $item): ?>
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Editar Item</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <input type="hidden" name="id" value="<?= $item['id'] ?>">
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="nome" 
+                               name="nome" 
+                               required
+                               value="<?= htmlspecialchars($item['nome']) ?>"
+                               placeholder="Nome do item">
                     </div>
-                    <div class="card-body">
-                        <form method="post">
-                            <input type="hidden" name="id" value="<?= $item['id'] ?>">
-                            
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="nome" class="form-label">Nome *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="nome" 
-                                           name="nome" 
-                                           required
-                                           value="<?= htmlspecialchars($item['nome']) ?>"
-                                           placeholder="Nome do item">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="codigo_interno" class="form-label">Código Interno</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="codigo_interno" 
-                                           name="codigo_interno"
-                                           value="<?= htmlspecialchars($item['codigo_interno']) ?>"
-                                           placeholder="Código único do item"
-                                           inputmode="numeric"
-                                           pattern="[0-9]*"
-                                           title="Digite apenas números">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="quantidade_minima" class="form-label">Quantidade Mínima</label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           id="quantidade_minima" 
-                                           name="quantidade_minima"
-                                           value="<?= htmlspecialchars($item['quantidade_minima']) ?>"
-                                           min="0"
-                                           placeholder="Estoque mínimo">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="unidade" class="form-label">Unidade de Medida</label>
-                                    <select class="form-select" id="unidade" name="unidade" required>
-                                        <option value="unidade" <?= ($item['unidade'] ?? 'unidade') == 'unidade' ? 'selected' : '' ?>>Unidade</option>
-                                        <option value="caixa" <?= ($item['unidade'] ?? '') == 'caixa' ? 'selected' : '' ?>>Caixa</option>
-                                        <option value="litro" <?= ($item['unidade'] ?? '') == 'litro' ? 'selected' : '' ?>>Litro</option>
-                                        <option value="kg" <?= ($item['unidade'] ?? '') == 'kg' ? 'selected' : '' ?>>Quilograma</option>
-                                        <option value="metro" <?= ($item['unidade'] ?? '') == 'metro' ? 'selected' : '' ?>>Metro</option>
-                                        <option value="rolo" <?= ($item['unidade'] ?? '') == 'rolo' ? 'selected' : '' ?>>Rolo</option>
-                                        <option value="pacote" <?= ($item['unidade'] ?? '') == 'pacote' ? 'selected' : '' ?>>Pacote</option>
-                                        <option value="par" <?= ($item['unidade'] ?? '') == 'par' ? 'selected' : '' ?>>Par</option>
-                                        <option value="conjunto" <?= ($item['unidade'] ?? '') == 'conjunto' ? 'selected' : '' ?>>Conjunto</option>
-                                        <option value="fardo" <?= ($item['unidade'] ?? '') == 'fardo' ? 'selected' : '' ?>>Fardo</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label for="categoria" class="form-label">Categoria</label>
-                                    <select class="form-select" id="categoria" name="categoria">
-                                        <option value="">-- Selecione ou digite --</option>
-                                        <?php foreach ($categorias_existentes as $cat): ?>
-                                            <option value="<?= htmlspecialchars($cat) ?>" 
-                                                <?= ($item['categoria'] ?? '') == $cat ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($cat) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <label for="descricao" class="form-label">Descrição</label>
-                                    <textarea class="form-control" 
-                                              id="descricao" 
-                                              name="descricao" 
-                                              rows="3"
-                                              placeholder="Descrição detalhada do item"><?= htmlspecialchars($item['descricao']) ?></textarea>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <label for="observacoes" class="form-label">Observações</label>
-                                    <textarea class="form-control" 
-                                              id="observacoes" 
-                                              name="observacoes" 
-                                              rows="2"
-                                              placeholder="Observações adicionais"><?= htmlspecialchars($item['observacoes']) ?></textarea>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> Atualizar
-                                    </button>
-                                    <a href="itens_cadastrados.php" class="btn btn-secondary">
-                                        <i class="bi bi-x"></i> Cancelar
-                                    </a>
-                                </div>
-                            </div>
-                        </form>
+                    
+                    <div class="col-md-6">
+                        <label for="codigo_interno" class="form-label">Código Interno</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="codigo_interno" 
+                               name="codigo_interno"
+                               value="<?= htmlspecialchars($item['codigo_interno']) ?>"
+                               placeholder="Código único do item"
+                               inputmode="numeric"
+                               pattern="[0-9]*"
+                               title="Digite apenas números">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="quantidade_minima" class="form-label">Quantidade Mínima</label>
+                        <input type="number" 
+                               class="form-control" 
+                               id="quantidade_minima" 
+                               name="quantidade_minima"
+                               value="<?= htmlspecialchars($item['quantidade_minima']) ?>"
+                               min="0"
+                               placeholder="Estoque mínimo">
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="unidade" class="form-label">Unidade de Medida</label>
+                        <select class="form-select" id="unidade" name="unidade" required>
+                            <option value="unidade" <?= ($item['unidade'] ?? 'unidade') == 'unidade' ? 'selected' : '' ?>>Unidade</option>
+                            <option value="caixa" <?= ($item['unidade'] ?? '') == 'caixa' ? 'selected' : '' ?>>Caixa</option>
+                            <option value="litro" <?= ($item['unidade'] ?? '') == 'litro' ? 'selected' : '' ?>>Litro</option>
+                            <option value="kg" <?= ($item['unidade'] ?? '') == 'kg' ? 'selected' : '' ?>>Quilograma</option>
+                            <option value="metro" <?= ($item['unidade'] ?? '') == 'metro' ? 'selected' : '' ?>>Metro</option>
+                            <option value="rolo" <?= ($item['unidade'] ?? '') == 'rolo' ? 'selected' : '' ?>>Rolo</option>
+                            <option value="pacote" <?= ($item['unidade'] ?? '') == 'pacote' ? 'selected' : '' ?>>Pacote</option>
+                            <option value="par" <?= ($item['unidade'] ?? '') == 'par' ? 'selected' : '' ?>>Par</option>
+                            <option value="conjunto" <?= ($item['unidade'] ?? '') == 'conjunto' ? 'selected' : '' ?>>Conjunto</option>
+                            <option value="fardo" <?= ($item['unidade'] ?? '') == 'fardo' ? 'selected' : '' ?>>Fardo</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="categoria" class="form-label">Categoria</label>
+                        <select class="form-select" id="categoria" name="categoria">
+                            <option value="">-- Selecione ou digite --</option>
+                            <?php foreach ($categorias_existentes as $cat): ?>
+                                <option value="<?= htmlspecialchars($cat) ?>" 
+                                    <?= ($item['categoria'] ?? '') == $cat ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($cat) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" 
+                                  id="descricao" 
+                                  name="descricao" 
+                                  rows="3"
+                                  placeholder="Descrição detalhada do item"><?= htmlspecialchars($item['descricao']) ?></textarea>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="observacoes" class="form-label">Observações</label>
+                        <textarea class="form-control" 
+                                  id="observacoes" 
+                                  name="observacoes" 
+                                  rows="2"
+                                  placeholder="Observações adicionais"><?= htmlspecialchars($item['observacoes']) ?></textarea>
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Atualizar
+                        </button>
+                        <a href="itens_cadastrados.php" class="btn btn-secondary">
+                            <i class="bi bi-x"></i> Cancelar
+                        </a>
                     </div>
                 </div>
-            <?php endif; ?>
+            </form>
+        </div>
+    </div>
+<?php endif; ?>
 
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Itens Cadastrados</h5>
-                        <div>
-                            <span class="badge bg-primary me-2">
-                                <?= count($itens) ?> registros
-                            </span>
-                            <a href="itens.php" class="btn btn-sm btn-success">
-                                <i class="bi bi-plus-lg"></i> Novo Item
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <?php if (!empty($itens)): ?>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Código</th>
-                                        <th>Estoque</th>
-                                        <th>Mínimo</th>
-                                        <th>Unidade</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($itens as $i): ?>
-                                        <tr class="<?= $i['status_estoque'] == 'danger' ? 'table-danger' : ($i['status_estoque'] == 'alert' ? 'table-warning' : '') ?>">
-                                            <td>
-                                                <?= htmlspecialchars($i['nome']) ?>
-                                                <?php if (!empty($i['descricao'])): ?>
-                                                    <br>
-                                                    <small class="text-muted">
-                                                        <?= htmlspecialchars(substr($i['descricao'], 0, 50)) ?>...
-                                                    </small>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <?= !empty($i['codigo_interno']) ? 
-                                                    htmlspecialchars($i['codigo_interno']) : 
-                                                    '<span class="text-muted">-</span>' ?>
-                                            </td>
-                                            <td>
-                                                <span class="badge <?= $i['quantidade_atual'] == 0 ? 'bg-danger' : ($i['quantidade_atual'] <= $i['quantidade_minima'] ? 'bg-warning' : 'bg-success') ?>">
-                                                    <?= $i['quantidade_atual'] ?>
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <?= $i['quantidade_minima'] ?>
-                                            </td>
-                                            <td>
-                                                <?= htmlspecialchars($i['unidade']) ?>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group">
-                                                    <a href="?edit=<?= $i['id'] ?>" 
-                                                       class="btn btn-warning"
-                                                       title="Editar">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <a href="?del=<?= $i['id'] ?>" 
-                                                       class="btn btn-danger" 
-                                                       onclick="return confirm('Tem certeza que deseja excluir este item?')"
-                                                       title="Excluir">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php else: ?>
-                        <div class="alert alert-info mb-0">
-                            <i class="bi bi-info-circle"></i> 
-                            Nenhum item cadastrado. 
-                            <a href="itens.php" class="alert-link">Cadastre seu primeiro item</a>.
-                        </div>
-                    <?php endif; ?>
-                </div>
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Itens Cadastrados</h5>
+            <div>
+                <span class="text-muted me-2">
+                    <?= count($itens) ?> registros
+                </span>
+                <a href="itens.php" class="btn btn-sm btn-success">
+                    <i class="bi bi-plus-lg"></i> Novo Item
+                </a>
             </div>
         </div>
     </div>
+    <div class="card-body">
+        <?php if (!empty($itens)): ?>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Código</th>
+                            <th>Estoque</th>
+                            <th>Mínimo</th>
+                            <th>Unidade</th>
+                            <th>Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($itens as $i): ?>
+                            <tr class="<?= $i['status_estoque'] == 'danger' ? 'table-danger' : ($i['status_estoque'] == 'alert' ? 'table-warning' : '') ?>">
+                                <td>
+                                    <strong><?= htmlspecialchars($i['nome']) ?></strong>
+                                    <?php if (!empty($i['descricao'])): ?>
+                                        <br>
+                                        <small class="text-muted">
+                                            <?= htmlspecialchars(substr($i['descricao'], 0, 50)) ?>...
+                                        </small>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?= !empty($i['codigo_interno']) ? 
+                                        htmlspecialchars($i['codigo_interno']) : 
+                                        '<span class="text-muted">-</span>' ?>
+                                </td>
+                                <td>
+                                    <span class="badge <?= $i['quantidade_atual'] == 0 ? 'bg-danger' : ($i['quantidade_atual'] <= $i['quantidade_minima'] ? 'bg-warning' : 'bg-success') ?>">
+                                        <?= $i['quantidade_atual'] ?>
+                                    </span>
+                                </td>
+                                <td>
+                                    <?= $i['quantidade_minima'] ?>
+                                </td>
+                                <td>
+                                    <?= htmlspecialchars($i['unidade']) ?>
+                                </td>
+                                <td>
+                                    <?= !empty($i['categoria']) ? htmlspecialchars($i['categoria']) : '<span class="text-muted">-</span>' ?>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="?edit=<?= $i['id'] ?>" 
+                                           class="btn btn-outline-primary"
+                                           title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="?del=<?= $i['id'] ?>" 
+                                           class="btn btn-outline-danger" 
+                                           onclick="return confirm('Tem certeza que deseja excluir este item?')"
+                                           title="Excluir">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-info mb-0">
+                <i class="bi bi-info-circle"></i> 
+                Nenhum item cadastrado. 
+                <a href="itens.php" class="alert-link">Cadastre seu primeiro item</a>.
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-
-        document.getElementById('categoria').addEventListener('change', function() {
-            if (this.value === '' && this.dataset.listenerAdded !== 'true') {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'form-control mt-2';
-                input.placeholder = 'Digite a nova categoria';
-                input.name = 'categoria_nova';
-                input.addEventListener('blur', function() {
-                    if (this.value.trim() !== '') {
-                        document.getElementById('categoria').value = this.value.trim();
-                    }
-                    this.remove();
-                });
-                this.parentNode.appendChild(input);
-                input.focus();
-                this.dataset.listenerAdded = 'true';
+<script>
+document.getElementById('categoria').addEventListener('change', function() {
+    if (this.value === '' && this.dataset.listenerAdded !== 'true') {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control mt-2';
+        input.placeholder = 'Digite a nova categoria';
+        input.name = 'categoria_nova';
+        input.addEventListener('blur', function() {
+            if (this.value.trim() !== '') {
+                document.getElementById('categoria').value = this.value.trim();
             }
+            this.remove();
         });
+        this.parentNode.appendChild(input);
+        input.focus();
+        this.dataset.listenerAdded = 'true';
+    }
+});
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const codigoInput = document.getElementById('codigo_interno');
-            if (codigoInput && !codigoInput.value && !<?= $id_edit > 0 ? 'true' : 'false' ?>) {
-                fetch('../api/proximo_codigo.php')
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.codigo) {
-                            codigoInput.value = data.codigo;
-                        }
-                    })
-                    .catch(error => console.error('Erro:', error));
-            }
-        });
-    </script>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', function() {
+    const codigoInput = document.getElementById('codigo_interno');
+    if (codigoInput && !codigoInput.value && !<?= $id_edit > 0 ? 'true' : 'false' ?>) {
+        fetch('../api/proximo_codigo.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.codigo) {
+                    codigoInput.value = data.codigo;
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+    }
+});
+</script>
+<?php
+$conteudo = ob_get_clean();
+$titulo = "Itens Cadastrados - Almoxarifado TI";
+
+include '../includes/template.php';

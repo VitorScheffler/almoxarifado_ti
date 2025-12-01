@@ -120,235 +120,213 @@ try {
     $erro = "Erro ao carregar computadores: " . $e->getMessage();
     $computadores = [];
 }
+
+ob_start();
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Computadores Cadastrados</h2>
+    <span class="text-muted">
+        <?= count($computadores) ?> registro(s)
+    </span>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado TI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/style.css">
-</head>
+<?php if ($erro): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= $erro ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-<body>
-    <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
+<?php if ($sucesso): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= $sucesso ?>
+        <button type="button" 
+                class="btn-close" 
+                data-bs-dismiss="alert" 
+                aria-label="Close">
+        </button>
+    </div>
+<?php endif; ?>
 
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Computadores Cadastrados</h2>
-            </div>
+<?php if ($id_edit > 0 && $computador): ?>
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Editar Computador</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <input type="hidden" name="id" value="<?= $computador['id'] ?>">
 
-            <?php if ($erro): ?>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <?= $erro ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($sucesso): ?>
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <?= $sucesso ?>
-                    <button type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                    </button>
-                </div>
-            <?php endif; ?>
-
-            <?php if ($id_edit > 0 && $computador): ?>
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0">Editar Computador</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="setor_id" class="form-label">Setor *</label>
+                        <select class="form-select" 
+                                id="setor_id" 
+                                name="setor_id" 
+                                required>
+                            <option value="">-- Selecione o Setor --</option>
+                            <?php foreach ($setores as $setor): ?>
+                                <option value="<?= $setor['id'] ?>" 
+                                    <?= ($computador['setor'] === $setor['setor']) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($setor['setor']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-                    <div class="card-body">
-                        <form method="post">
-                            <input type="hidden" name="id" value="<?= $computador['id'] ?>">
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="setor_id" class="form-label">Setor *</label>
-                                    <select class="form-select" 
-                                            id="setor_id" 
-                                            name="setor_id" 
-                                            required>
-                                        <option value="">-- Selecione o Setor --</option>
-                                        <?php foreach ($setores as $setor): ?>
-                                            <option value="<?= $setor['id'] ?>" 
-                                                <?= ($computador['setor'] === $setor['setor']) ? 'selected' : '' ?>>
-                                                <?= htmlspecialchars($setor['setor']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
+                    <div class="col-md-6">
+                        <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="patrimonio_computador" 
+                               name="patrimonio_computador" 
+                               required
+                               inputmode="numeric"
+                               pattern="[0-9]*"
+                               value="<?= htmlspecialchars($computador['patrimonio_computador']) ?>"
+                               placeholder="000000"
+                               title="Digite apenas números">
+                    </div>
 
-                                <div class="col-md-6">
-                                    <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="patrimonio_computador" 
-                                           name="patrimonio_computador" 
-                                           required
-                                           inputmode="numeric"
-                                           pattern="[0-9]*"
-                                           value="<?= htmlspecialchars($computador['patrimonio_computador']) ?>"
-                                           placeholder="000000"
-                                           title="Digite apenas números">
-                                </div>
+                    <div class="col-md-6">
+                        <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="patrimonio_monitor1" 
+                               name="patrimonio_monitor1"
+                               inputmode="numeric"
+                               pattern="[0-9]*"
+                               value="<?= htmlspecialchars($computador['patrimonio_monitor1']) ?>"
+                               placeholder="000000"
+                               title="Digite apenas números">
+                    </div>
 
-                                <div class="col-md-6">
-                                    <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="patrimonio_monitor1" 
-                                           name="patrimonio_monitor1"
-                                           inputmode="numeric"
-                                           pattern="[0-9]*"
-                                           value="<?= htmlspecialchars($computador['patrimonio_monitor1']) ?>"
-                                           placeholder="000000"
-                                           title="Digite apenas números">
-                                </div>
+                    <div class="col-md-6">
+                        <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="patrimonio_monitor2" 
+                               name="patrimonio_monitor2"
+                               inputmode="numeric"
+                               pattern="[0-9]*"
+                               value="<?= htmlspecialchars($computador['patrimonio_monitor2']) ?>"
+                               placeholder="000000"
+                               title="Digite apenas números">
+                    </div>
 
-                                <div class="col-md-6">
-                                    <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="patrimonio_monitor2" 
-                                           name="patrimonio_monitor2"
-                                           inputmode="numeric"
-                                           pattern="[0-9]*"
-                                           value="<?= htmlspecialchars($computador['patrimonio_monitor2']) ?>"
-                                           placeholder="000000"
-                                           title="Digite apenas números">
-                                </div>
+                    <div class="col-md-6">
+                        <label for="usuario" class="form-label">Usuário</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="usuario" 
+                               name="usuario"
+                               value="<?= htmlspecialchars($computador['usuario']) ?>"
+                               placeholder="Nome do usuário">
+                    </div>
 
-                                <div class="col-md-6">
-                                    <label for="usuario" class="form-label">Usuário</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           id="usuario" 
-                                           name="usuario"
-                                           value="<?= htmlspecialchars($computador['usuario']) ?>"
-                                           placeholder="Nome do usuário">
-                                </div>
+                    <div class="col-12">
+                        <label for="observacoes" class="form-label">Observações</label>
+                        <textarea class="form-control" 
+                                  id="observacoes" 
+                                  name="observacoes" 
+                                  rows="3"
+                                  placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes']) ?></textarea>
+                    </div>
 
-                                <div class="col-12">
-                                    <label for="observacoes" class="form-label">Observações</label>
-                                    <textarea class="form-control" 
-                                              id="observacoes" 
-                                              name="observacoes" 
-                                              rows="3"
-                                              placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes']) ?></textarea>
-                                </div>
-
-                                <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save"></i> Atualizar
-                                    </button>
-                                    <a href="computadores_cadastrados.php" class="btn btn-secondary">
-                                        <i class="bi bi-x"></i> Cancelar
-                                    </a>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save"></i> Atualizar
+                        </button>
+                        <a href="computadores_cadastrados.php" class="btn btn-secondary">
+                            <i class="bi bi-x"></i> Cancelar
+                        </a>
                     </div>
                 </div>
-            <?php endif; ?>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Computadores Cadastrados</h5>
-                        <span class="badge bg-primary">
-                            <?= count($computadores) ?> registros
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <?php if (!empty($computadores)): ?>
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Setor</th>
-                                        <th>Usuário</th>
-                                        <th>Patrimônio Computador</th>
-                                        <th>Monitor 1</th>
-                                        <th>Monitor 2</th>
-                                        <th>Observações</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php foreach ($computadores as $c): ?>
-                                        <tr>
-                                            <td>
-                                                <?= htmlspecialchars($c['setor']) ?>
-                                            </td>
-                                            <td>
-                                                <?= !empty($c['usuario']) ? htmlspecialchars($c['usuario']) : '<span class="text-muted">Não informado</span>' ?>
-                                            </td>
-                                            <td>
-                                                <?= htmlspecialchars($c['patrimonio_computador']) ?>
-                                            </td>
-                                            <td>
-                                                <?= !empty($c['patrimonio_monitor1']) ? htmlspecialchars($c['patrimonio_monitor1']) : '<span class="text-muted">-</span>' ?>
-                                            </td>
-                                            <td>
-                                                <?= !empty($c['patrimonio_monitor2']) ? htmlspecialchars($c['patrimonio_monitor2']) : '<span class="text-muted">-</span>' ?>
-                                            </td>
-                                            <td>
-                                                <?php if (!empty($c['observacoes'])): ?>
-                                                    <small class="text-muted"><?= htmlspecialchars(substr($c['observacoes'], 0, 50)) ?>...</small>
-                                                <?php else: ?>
-                                                    <span class="text-muted">-</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group">
-                                                    <a href="?edit=<?= $f['id'] ?>" 
-                                                       class="btn btn-warning"
-                                                       title="Editar">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <a href="?del=<?= $f['id'] ?>" 
-                                                       class="btn btn-danger" 
-                                                       onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')"
-                                                       title="Excluir">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php else: ?>
-                        <div class="alert alert-info mb-0">
-                            Nenhum computador cadastrado. <a href="computadores.php">Cadastre seu primeiro computador</a>.
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
+<?php endif; ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function () {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-    </script>
-</body>
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Lista de Computadores</h5>
+        </div>
+    </div>
+    <div class="card-body">
+        <?php if (!empty($computadores)): ?>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Setor</th>
+                            <th>Usuário</th>
+                            <th>Patrimônio Computador</th>
+                            <th>Monitor 1</th>
+                            <th>Monitor 2</th>
+                            <th>Observações</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($computadores as $c): ?>
+                            <tr>
+                                <td>
+                                    <?= htmlspecialchars($c['setor']) ?>
+                                </td>
+                                <td>
+                                    <?= !empty($c['usuario']) ? htmlspecialchars($c['usuario']) : '<span class="text-muted">Não informado</span>' ?>
+                                </td>
+                                <td>
+                                    <?= htmlspecialchars($c['patrimonio_computador']) ?>
+                                </td>
+                                <td>
+                                    <?= !empty($c['patrimonio_monitor1']) ? htmlspecialchars($c['patrimonio_monitor1']) : '<span class="text-muted">-</span>' ?>
+                                </td>
+                                <td>
+                                    <?= !empty($c['patrimonio_monitor2']) ? htmlspecialchars($c['patrimonio_monitor2']) : '<span class="text-muted">-</span>' ?>
+                                </td>
+                                <td>
+                                    <?php if (!empty($c['observacoes'])): ?>
+                                        <small class="text-muted"><?= htmlspecialchars(substr($c['observacoes'], 0, 50)) ?>...</small>
+                                    <?php else: ?>
+                                        <span class="text-muted">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="?edit=<?= $f['id'] ?>" 
+                                            class="btn btn-warning"
+                                            title="Editar">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="?del=<?= $f['id'] ?>" 
+                                            class="btn btn-danger" 
+                                            onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')"
+                                            title="Excluir">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-info mb-0">
+                Nenhum computador cadastrado. <a href="computadores.php">Cadastre seu primeiro computador</a>.
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+<?php
+$conteudo = ob_get_clean();
 
-</html>
+$titulo = "Computadores Cadastrados - Almoxarifado TI";
+
+include '../includes/template.php';
