@@ -1,4 +1,5 @@
 <?php
+$pagina_atual = 'computadores_cadastrados.php';
 require '../includes/config.php';
 
 $erro = '';
