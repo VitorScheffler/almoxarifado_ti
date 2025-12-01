@@ -139,6 +139,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                    required
                                    placeholder="Sua senha"
                                    autocomplete="current-password">
+                            <button type="button" 
+                                    id="toggleSenha" 
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePasswordVisibility()">
+                                <i class="bi bi-eye"></i>
+                            </button>
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 py-2">
@@ -167,31 +173,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             document.getElementById('usuario').focus();
         });
 
-        document.querySelector('.input-group').addEventListener('click', function(e) {
-            if (e.target.classList.contains('bi-eye') || e.target.classList.contains('bi-eye-slash')) {
-                const senhaInput = document.getElementById('senha');
-                const icon = e.target;
-                if (senhaInput.type === 'password') {
-                    senhaInput.type = 'text';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                } else {
-                    senhaInput.type = 'password';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                }
+        function togglePasswordVisibility() {
+            const senhaInput = document.getElementById('senha');
+            const toggleButton = document.getElementById('toggleSenha');
+            const icon = toggleButton.querySelector('i');
+            
+            if (senhaInput.type === 'password') {
+                senhaInput.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+                toggleButton.title = 'Ocultar senha';
+            } else {
+                senhaInput.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+                toggleButton.title = 'Mostrar senha';
             }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const senhaGroup = document.querySelector('input[name="senha"]').parentNode;
-            const toggleButton = document.createElement('button');
-            toggleButton.type = 'button';
-            toggleButton.className = 'btn btn-outline-secondary';
-            toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
-            toggleButton.title = 'Mostrar/ocultar senha';
-            senhaGroup.appendChild(toggleButton);
-        });
+        }
     </script>
 </body>
 </html>
