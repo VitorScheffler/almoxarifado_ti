@@ -214,7 +214,7 @@ try {
                         
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="nome" class="form-label">Nome *</label>
+                                <label for="nome" class="form-label">Nome</label>
                                 <input type="text" class="form-control" id="nome" name="nome" required
                                     value="<?= htmlspecialchars($fornecedor['nome'] ?? '') ?>">
                             </div>

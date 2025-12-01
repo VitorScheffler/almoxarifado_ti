@@ -283,7 +283,7 @@ try {
                     <div class="card-body">
                         <?php if (empty($itens)): ?>
                             <div class="alert alert-info mb-0">
-                                Nenhum item cadastrado. <a href="itens.php">Cadastre seu item fornecedor</a>.
+                                Nenhum item cadastrado. <a href="itens.php">Cadastre seu primeiro item.</a>.
                             </div>
                         <?php else: ?>
                             <div class="table-responsive">

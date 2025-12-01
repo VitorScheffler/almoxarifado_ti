@@ -226,7 +226,7 @@ try {
 
         <div class="main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="mb-0">Cadastrar novos Itens</h2>
+                <h2 class="mb-0">Cadastrar novos itens</h2>
             </div>
 
             <?php if ($erro): ?>
@@ -239,7 +239,7 @@ try {
             
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><?= $id_edit ? 'Editar Item' : 'Cadastrar Novo Item' ?></h5>
+                    <h5 class="mb-0"><?= $id_edit ? 'Editar Item' : 'Cadastrar novo item' ?></h5>
                 </div>
                 <div class="card-body">
                     <form method="post">

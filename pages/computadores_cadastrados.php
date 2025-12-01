@@ -11,7 +11,6 @@ function limparDados($dado)
     return $dado;
 }
 
-// Buscar setores da tabela setor
 $setores = [];
 try {
     $stmt = $pdo->query("SELECT id, setor FROM setor ORDER BY setor");
@@ -46,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $observacoes = limparDados($_POST['observacoes'] ?? '');
     $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
-    // Buscar nome do setor baseado no ID
     $setor_nome = '';
     if ($setor_id > 0) {
         try {

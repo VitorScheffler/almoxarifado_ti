@@ -188,7 +188,7 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-6">
                                 <label for="item_id" class="form-label">Item</label>
                                 <select name="item_id" id="item_id" class="form-select" required>
-                                    <option value="">Selecione um item</option>
+                                    <option value="">-- Selecione o item --</option>
                                     <?php
                                     $itens = $pdo->query("SELECT id, nome, quantidade_atual FROM itens ORDER BY nome")->fetchAll();
                                     foreach ($itens as $item) {
@@ -224,7 +224,7 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <div class="col-md-6">
                                 <label for="motivo" class="form-label">Motivo</label>
                                 <select name="motivo" id="motivo" class="form-select" required>
-                                    <option value="">Selecione o motivo</option>
+                                    <option value="">-- Selecione o motivo --</option>
                                     <option value="Substituição">Substituição</option>
                                     <option value="Lixo Eletronico">Lixo Eletronico</option>
                                     <option value="Outro">Outro</option>
@@ -242,9 +242,9 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div class="mt-4">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-box-arrow-up"></i> Registrar Saida
-                                </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-up"></i> Registrar Saida
+                            </button>
                             <button type="reset" class="btn btn-danger">
                                 <i class="bi bi-x-circle"></i> Limpar
                             </button>

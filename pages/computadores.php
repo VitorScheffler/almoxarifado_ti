@@ -139,8 +139,12 @@ if (isset($_GET['del'])) {
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -157,8 +161,12 @@ if (isset($_GET['del'])) {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link active dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -176,8 +184,12 @@ if (isset($_GET['del'])) {
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -223,14 +235,22 @@ if (isset($_GET['del'])) {
             <?php if ($erro): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <?= $erro ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
                 </div>
             <?php endif; ?>
 
             <?php if ($sucesso): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <?= $sucesso ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
                 </div>
             <?php endif; ?>
 
@@ -258,36 +278,68 @@ if (isset($_GET['del'])) {
 
                             <div class="col-md-6">
                                 <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
-                                <input type="text" class="form-control" id="patrimonio_computador" name="patrimonio_computador" required
-                                    value="<?= htmlspecialchars($computador['patrimonio_computador'] ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="patrimonio_computador" 
+                                       name="patrimonio_computador" 
+                                       required
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
+                                       value="<?= htmlspecialchars($computador['patrimonio_computador'] ?? '') ?>"
+                                       placeholder="000000"
+                                       title="Digite apenas números">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
-                                <input type="text" class="form-control" id="patrimonio_monitor1" name="patrimonio_monitor1"
-                                    value="<?= htmlspecialchars($computador['patrimonio_monitor1'] ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="patrimonio_monitor1" 
+                                       name="patrimonio_monitor1"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
+                                       value="<?= htmlspecialchars($computador['patrimonio_monitor1'] ?? '') ?>"
+                                       placeholder="000000"
+                                       title="Digite apenas números">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
-                                <input type="text" class="form-control" id="patrimonio_monitor2" name="patrimonio_monitor2"
-                                    value="<?= htmlspecialchars($computador['patrimonio_monitor2'] ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="patrimonio_monitor2" 
+                                       name="patrimonio_monitor2"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*"
+                                       value="<?= htmlspecialchars($computador['patrimonio_monitor2'] ?? '') ?>"
+                                       placeholder="000000"
+                                       title="Digite apenas números">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="usuario" class="form-label">Usuário</label>
-                                <input type="text" class="form-control" id="usuario" name="usuario"
-                                    value="<?= htmlspecialchars($computador['usuario'] ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="usuario" 
+                                       name="usuario"
+                                       value="<?= htmlspecialchars($computador['usuario'] ?? '') ?>"
+                                       placeholder="Usuário">
                             </div>
 
                             <div class="col-12">
                                 <label for="observacoes" class="form-label">Observações</label>
-                                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
+                                <textarea class="form-control" 
+                                          id="observacoes" 
+                                          name="observacoes" 
+                                          rows="3"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
                             </div>
 
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-save"></i> <?= $id_edit ? 'Atualizar' : 'Cadastrar' ?>
+                                </button>
+                                <button type="reset" class="btn btn-danger">
+                                    <i class="bi bi-x-circle"></i> Limpar
                                 </button>
                                 <?php if ($id_edit): ?>
                                     <a href="computadores.php" class="btn btn-secondary">
