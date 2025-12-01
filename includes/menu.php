@@ -47,7 +47,7 @@
                 <li>
                     <a class="dropdown-item <?= ($pagina_atual ?? '') == 'computadores_cadastrados.php' ? 'active' : '' ?>" 
                        href="computadores_cadastrados.php">
-                        <i class="bi bi-laptop"></i> Computadores
+                        <i class="bi bi-laptop"></i> Computadores Cadastrados
                     </a>
                 </li>
                 <li>
