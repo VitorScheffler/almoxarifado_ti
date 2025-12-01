@@ -65,13 +65,13 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Almoxarifado TI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon" />
-    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="d-flex">
@@ -85,8 +85,12 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -103,8 +107,12 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -122,8 +130,12 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -157,7 +169,6 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <i class="bi bi-box-arrow-right"></i> Sair
                     </a>
                 </li>
-
             </ul>
         </div>
 
@@ -166,84 +177,112 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h2 class="mb-0">Registrar Saída de Itens</h2>
             </div>
 
+            <?php if ($success): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> Saída registrada com sucesso!
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
+                </div>
+            <?php endif; ?>
+
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Registrar Saída</h5>
                 </div>
                 <div class="card-body">
-                    <?php if ($erro) : ?>
+                    <?php if ($erro): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <?= htmlspecialchars($erro) ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    <?php elseif ($success) : ?>
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Saída registrada com sucesso!
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <i class="bi bi-exclamation-triangle"></i> <?= htmlspecialchars($erro) ?>
+                            <button type="button" 
+                                    class="btn-close" 
+                                    data-bs-dismiss="alert" 
+                                    aria-label="Close">
+                            </button>
                         </div>
                     <?php endif; ?>
 
                     <form method="POST" novalidate>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="item_id" class="form-label">Item</label>
-                                <select name="item_id" id="item_id" class="form-select" required>
+                                <label for="item_id" class="form-label">Item *</label>
+                                <select name="item_id" 
+                                        id="item_id" 
+                                        class="form-select" 
+                                        required>
                                     <option value="">-- Selecione o item --</option>
                                     <?php
                                     $itens = $pdo->query("SELECT id, nome, quantidade_atual FROM itens ORDER BY nome")->fetchAll();
                                     foreach ($itens as $item) {
-                                        echo "<option value='" . (int)$item['id'] . "'>" . htmlspecialchars($item['nome']) . " (Estoque: " . (int)$item['quantidade_atual'] . ")</option>";
+                                        echo '<option value="' . (int)$item['id'] . '">' 
+                                            . htmlspecialchars($item['nome']) 
+                                            . ' (Estoque: ' . (int)$item['quantidade_atual'] . ')</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="quantidade" class="form-label">Quantidade</label>
-                                <input
-                                    type="number"
-                                    name="quantidade"
-                                    id="quantidade"
-                                    class="form-control"
-                                    required
-                                    min="1"
-                                />
+                                <label for="quantidade" class="form-label">Quantidade *</label>
+                                <input type="number"
+                                       name="quantidade"
+                                       id="quantidade"
+                                       class="form-control"
+                                       required
+                                       min="1"
+                                       inputmode="numeric"
+                                       placeholder="Quantidade">
                             </div>
                             <div class="col-md-6">
-                                <label for="usuario_destino" class="form-label">Usuário Destino</label>
+                                <label for="usuario_destino" class="form-label">Usuário Destino *</label>
                                 <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                    <input
-                                        type="text"
-                                        name="usuario_destino"
-                                        id="usuario_destino"
-                                        class="form-control"
-                                        required
-                                    />
+                                    <span class="input-group-text">
+                                        <i class="bi bi-person"></i>
+                                    </span>
+                                    <input type="text"
+                                           name="usuario_destino"
+                                           id="usuario_destino"
+                                           class="form-control"
+                                           required
+                                           placeholder="Nome do usuário destino">
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="motivo" class="form-label">Motivo</label>
-                                <select name="motivo" id="motivo" class="form-select" required>
+                                <label for="motivo" class="form-label">Motivo *</label>
+                                <select name="motivo" 
+                                        id="motivo" 
+                                        class="form-select" 
+                                        required>
                                     <option value="">-- Selecione o motivo --</option>
                                     <option value="Substituição">Substituição</option>
-                                    <option value="Lixo Eletronico">Lixo Eletronico</option>
+                                    <option value="Lixo Eletrônico">Lixo Eletrônico</option>
+                                    <option value="Manutenção">Manutenção</option>
+                                    <option value="Instalação">Instalação</option>
+                                    <option value="Projeto">Projeto</option>
                                     <option value="Outro">Outro</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="data_hora" class="form-label">Data e Hora</label>
-                                <input
-                                    type="datetime-local"
-                                    name="data_hora"
-                                    id="data_hora"
-                                    class="form-control"
-                                    value="<?= date('Y-m-d\TH:i') ?>"
-                                />
+                                <input type="datetime-local"
+                                       name="data_hora"
+                                       id="data_hora"
+                                       class="form-control"
+                                       value="<?= date('Y-m-d\TH:i') ?>">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="observacoes" class="form-label">Observações</label>
+                                <textarea name="observacoes"
+                                          id="observacoes"
+                                          class="form-control"
+                                          rows="2"
+                                          placeholder="Observações adicionais (opcional)"></textarea>
                             </div>
                         </div>
                         <div class="mt-4">
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-box-arrow-up"></i> Registrar Saida
+                                <i class="bi bi-box-arrow-up"></i> Registrar Saída
                             </button>
                             <button type="reset" class="btn btn-danger">
                                 <i class="bi bi-x-circle"></i> Limpar
@@ -255,59 +294,75 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="card">
                 <div class="card-header">
-                    <h5 class="mb-0">Últimas Saídas</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Últimas Saídas</h5>
+                        <span class="badge bg-primary">
+                            Total: <?= $total_items ?> registros
+                        </span>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Quantidade</th>
-                                    <th>Destino</th>
-                                    <th>Motivo</th>
-                                    <th>Data/Hora</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($saidas): ?>
+                    <?php if ($saidas): ?>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Quantidade</th>
+                                        <th>Destino</th>
+                                        <th>Motivo</th>
+                                        <th>Data/Hora</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                     <?php foreach ($saidas as $saida): ?>
                                         <tr>
                                             <td><?= htmlspecialchars($saida['item_nome']) ?></td>
-                                            <td><?= htmlspecialchars($saida['quantidade']) ?></td>
+                                            <td>
+                                                <span class="badge bg-danger">
+                                                    <?= htmlspecialchars($saida['quantidade']) ?>
+                                                </span>
+                                            </td>
                                             <td><?= htmlspecialchars($saida['usuario_destino']) ?></td>
-                                            <td><?= htmlspecialchars($saida['motivo']) ?></td>
+                                            <td>
+                                                <span class="badge bg-secondary">
+                                                    <?= htmlspecialchars($saida['motivo']) ?>
+                                                </span>
+                                            </td>
                                             <td><?= date('d/m/Y H:i', strtotime($saida['data_hora'])) ?></td>
                                         </tr>
                                     <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">
-                                            Nenhuma saída registrada recentemente
-                                        </td>
-                                    </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <nav>
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">Anterior</a>
-                            </li>
-
-                            <?php for ($p = 1; $p <= $total_pages; $p++): ?>
-                                <li class="page-item <?= ($p == $page) ? 'active' : '' ?>">
-                                    <a class="page-link" href="?page=<?= $p ?>"><?= $p ?></a>
+                        <nav class="mt-3">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $page - 1 ?>">
+                                        <i class="bi bi-chevron-left"></i> Anterior
+                                    </a>
                                 </li>
-                            <?php endfor; ?>
 
-                            <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-                                <a class="page-link" href="?page=<?= $page + 1 ?>">Próximo</a>
-                            </li>
-                        </ul>
-                    </nav>
+                                <?php for ($p = 1; $p <= $total_pages; $p++): ?>
+                                    <li class="page-item <?= ($p == $page) ? 'active' : '' ?>">
+                                        <a class="page-link" href="?page=<?= $p ?>"><?= $p ?></a>
+                                    </li>
+                                <?php endfor; ?>
+
+                                <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $page + 1 ?>">
+                                        Próximo <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    <?php else: ?>
+                        <div class="alert alert-info mb-0">
+                            <i class="bi bi-info-circle"></i> 
+                            Nenhuma saída registrada ainda.
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -315,8 +370,30 @@ $saidas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector('.navbar-toggler')?.addEventListener('click', function () {
-            document.querySelector('.sidebar')?.classList.toggle('active');
+        document.querySelector('.navbar-toggler').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        document.getElementById('item_id').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                const text = selectedOption.text;
+                const estoqueMatch = text.match(/Estoque: (\d+)/);
+                if (estoqueMatch) {
+                    const estoque = parseInt(estoqueMatch[1]);
+                    document.getElementById('quantidade').max = estoque;
+                    document.getElementById('quantidade').setAttribute('title', `Máximo: ${estoque} unidades`);
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataHoraInput = document.getElementById('data_hora');
+            if (dataHoraInput && !dataHoraInput.value) {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                dataHoraInput.value = now.toISOString().slice(0, 16);
+            }
         });
     </script>
 </body>

@@ -146,8 +146,12 @@ try {
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -164,8 +168,12 @@ try {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link active dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -183,8 +191,12 @@ try {
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -230,14 +242,22 @@ try {
             <?php if ($erro): ?>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <?= $erro ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
                 </div>
             <?php endif; ?>
 
             <?php if ($sucesso): ?>
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <?= $sucesso ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
                 </div>
             <?php endif; ?>
 
@@ -253,7 +273,10 @@ try {
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <label for="setor_id" class="form-label">Setor *</label>
-                                    <select class="form-select" id="setor_id" name="setor_id" required>
+                                    <select class="form-select" 
+                                            id="setor_id" 
+                                            name="setor_id" 
+                                            required>
                                         <option value="">-- Selecione o Setor --</option>
                                         <?php foreach ($setores as $setor): ?>
                                             <option value="<?= $setor['id'] ?>" 
@@ -266,31 +289,61 @@ try {
 
                                 <div class="col-md-6">
                                     <label for="patrimonio_computador" class="form-label">Patrimônio Computador *</label>
-                                    <input type="text" class="form-control" id="patrimonio_computador" name="patrimonio_computador" required
-                                        value="<?= htmlspecialchars($computador['patrimonio_computador']) ?>">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="patrimonio_computador" 
+                                           name="patrimonio_computador" 
+                                           required
+                                           inputmode="numeric"
+                                           pattern="[0-9]*"
+                                           value="<?= htmlspecialchars($computador['patrimonio_computador']) ?>"
+                                           placeholder="000000"
+                                           title="Digite apenas números">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="patrimonio_monitor1" class="form-label">Patrimônio Monitor 1</label>
-                                    <input type="text" class="form-control" id="patrimonio_monitor1" name="patrimonio_monitor1"
-                                        value="<?= htmlspecialchars($computador['patrimonio_monitor1']) ?>">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="patrimonio_monitor1" 
+                                           name="patrimonio_monitor1"
+                                           inputmode="numeric"
+                                           pattern="[0-9]*"
+                                           value="<?= htmlspecialchars($computador['patrimonio_monitor1']) ?>"
+                                           placeholder="000000"
+                                           title="Digite apenas números">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="patrimonio_monitor2" class="form-label">Patrimônio Monitor 2</label>
-                                    <input type="text" class="form-control" id="patrimonio_monitor2" name="patrimonio_monitor2"
-                                        value="<?= htmlspecialchars($computador['patrimonio_monitor2']) ?>">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="patrimonio_monitor2" 
+                                           name="patrimonio_monitor2"
+                                           inputmode="numeric"
+                                           pattern="[0-9]*"
+                                           value="<?= htmlspecialchars($computador['patrimonio_monitor2']) ?>"
+                                           placeholder="000000"
+                                           title="Digite apenas números">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label for="usuario" class="form-label">Usuário</label>
-                                    <input type="text" class="form-control" id="usuario" name="usuario"
-                                        value="<?= htmlspecialchars($computador['usuario']) ?>">
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="usuario" 
+                                           name="usuario"
+                                           value="<?= htmlspecialchars($computador['usuario']) ?>"
+                                           placeholder="Nome do usuário">
                                 </div>
 
                                 <div class="col-12">
                                     <label for="observacoes" class="form-label">Observações</label>
-                                    <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><?= htmlspecialchars($computador['observacoes']) ?></textarea>
+                                    <textarea class="form-control" 
+                                              id="observacoes" 
+                                              name="observacoes" 
+                                              rows="3"
+                                              placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes']) ?></textarea>
                                 </div>
 
                                 <div class="col-12">
@@ -357,11 +410,13 @@ try {
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="?edit=<?= $c['id'] ?>" class="btn btn-sm btn-warning">
+                                                <a href="?edit=<?= $c['id'] ?>" 
+                                                   class="btn btn-sm btn-warning">
                                                     <i class="bi bi-pencil"></i> Editar
                                                 </a>
-                                                <a href="?del=<?= $c['id'] ?>" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Tem certeza que deseja excluir este computador?')">
+                                                <a href="?del=<?= $c['id'] ?>" 
+                                                   class="btn btn-sm btn-danger"
+                                                   onclick="return confirm('Tem certeza que deseja excluir este computador?')">
                                                     <i class="bi bi-trash"></i> Excluir
                                                 </a>
                                             </td>

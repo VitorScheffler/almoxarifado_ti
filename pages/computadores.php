@@ -265,7 +265,10 @@ if (isset($_GET['del'])) {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="setor_id" class="form-label">Setor *</label>
-                                <select class="form-select" id="setor_id" name="setor_id" required>
+                                <select class="form-select" 
+                                        id="setor_id" 
+                                        name="setor_id" 
+                                        required>
                                     <option value="">-- Selecione o Setor --</option>
                                     <?php foreach ($setores as $setor): ?>
                                         <option value="<?= $setor['id'] ?>" 
@@ -323,7 +326,7 @@ if (isset($_GET['del'])) {
                                        id="usuario" 
                                        name="usuario"
                                        value="<?= htmlspecialchars($computador['usuario'] ?? '') ?>"
-                                       placeholder="Usuário">
+                                       placeholder="Nome do usuário">
                             </div>
 
                             <div class="col-12">
@@ -331,7 +334,8 @@ if (isset($_GET['del'])) {
                                 <textarea class="form-control" 
                                           id="observacoes" 
                                           name="observacoes" 
-                                          rows="3"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
+                                          rows="3"
+                                          placeholder="Observações sobre o computador"><?= htmlspecialchars($computador['observacoes'] ?? '') ?></textarea>
                             </div>
 
                             <div class="col-12">

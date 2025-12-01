@@ -62,10 +62,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     $_SESSION['usuario']  = $usuario;
                     $_SESSION['dominio']  = $dominio;
                     session_regenerate_id(true);
-                    header("Location: /");
+                    header("Location: ../index.php");
                     exit;
                 } else {
-                    $mensagem = "Acesso negado: você não pertence ao grupo autorizado (TI).";
+                    $mensagem = "Acesso negado: você não pertence ao grupo autorizado.";
                 }
             }
 
@@ -89,46 +89,108 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
-
-        <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
-    <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px;">
-        <div class="card-header bg-primary text-white text-center py-3">
-            <h4><i class="bi bi-box-seam"></i> Almoxarifado TI</h4>
-        </div>
-        <div class="card-body p-4">
-            <h5 class="card-title text-center mb-4">Acesso ao Sistema</h5>
-            <?php if ($mensagem) : ?>
-                <div class="alert alert-danger alert-dismissible fade show">
-                    <?php echo $mensagem; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            <?php endif; ?>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="usuario" class="form-label">Usuário</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                        <input type="text" id="usuario" name="usuario" class="form-control" required>
+    <div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px;">
+            <div class="card-header bg-primary text-white text-center py-3">
+                <h4 class="mb-0">
+                    <i class="bi bi-box-seam"></i> Almoxarifado TI
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <h5 class="card-title text-center mb-4">Acesso ao Sistema</h5>
+                
+                <?php if ($mensagem): ?>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> <?= htmlspecialchars($mensagem) ?>
+                        <button type="button" 
+                                class="btn-close" 
+                                data-bs-dismiss="alert" 
+                                aria-label="Close">
+                        </button>
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="senha" class="form-label">Senha</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                        <input type="password" id="senha" name="senha" class="form-control" required>
+                <?php endif; ?>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Usuário</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <input type="text" 
+                                   id="usuario" 
+                                   name="usuario" 
+                                   class="form-control" 
+                                   required
+                                   placeholder="Seu usuário do domínio"
+                                   autocomplete="username">
+                        </div>
                     </div>
-                </div>
-                <button type="submit" class="btn btn-primary w-100 py-2">
-                    <i class="bi bi-box-arrow-in-right"></i> Entrar
-                </button>
-            </form>
+                    <div class="mb-4">
+                        <label for="senha" class="form-label">Senha</label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" 
+                                   id="senha" 
+                                   name="senha" 
+                                   class="form-control" 
+                                   required
+                                   placeholder="Sua senha"
+                                   autocomplete="current-password">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2">
+                        <i class="bi bi-box-arrow-in-right"></i> Entrar
+                    </button>
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="bi bi-info-circle"></i> 
+                            Acesso restrito ao grupo autorizado
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center py-3">
+                <small class="text-muted">
+                    <i class="bi bi-shield-check"></i> 
+                    Sistema de almoxarifado - Coopershoes
+                </small>
+            </div>
         </div>
     </div>
-</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.querySelector('.navbar-toggler').addEventListener('click', function() {
-            document.querySelector('.sidebar').classList.toggle('active');
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('usuario').focus();
+        });
+
+        document.querySelector('.input-group').addEventListener('click', function(e) {
+            if (e.target.classList.contains('bi-eye') || e.target.classList.contains('bi-eye-slash')) {
+                const senhaInput = document.getElementById('senha');
+                const icon = e.target;
+                if (senhaInput.type === 'password') {
+                    senhaInput.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    senhaInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const senhaGroup = document.querySelector('input[name="senha"]').parentNode;
+            const toggleButton = document.createElement('button');
+            toggleButton.type = 'button';
+            toggleButton.className = 'btn btn-outline-secondary';
+            toggleButton.innerHTML = '<i class="bi bi-eye"></i>';
+            toggleButton.title = 'Mostrar/ocultar senha';
+            senhaGroup.appendChild(toggleButton);
         });
     </script>
 </body>

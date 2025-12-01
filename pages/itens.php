@@ -9,14 +9,13 @@ if (isset($_GET['success']) && $_GET['success'] == 1) {
     $sucesso = "Item cadastrado com sucesso!";
 }
 
-// Buscar o maior código interno para novo item
 if (!isset($_GET['edit'])) {
     try {
         $stmt = $pdo->query("SELECT MAX(CAST(codigo_interno AS UNSIGNED)) as max_codigo FROM itens");
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         $proximo_codigo = ($resultado['max_codigo'] ?? 0) + 1;
     } catch (PDOException $e) {
-        $proximo_codigo = 1; // Valor padrão caso ocorra algum erro
+        $proximo_codigo = 1;
     }
 }
 
@@ -148,8 +147,12 @@ try {
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -166,8 +169,12 @@ try {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -185,8 +192,12 @@ try {
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link active dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -220,21 +231,39 @@ try {
                         <i class="bi bi-box-arrow-right"></i> Sair
                     </a>
                 </li>
-
             </ul>
         </div>
 
         <div class="main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="mb-0">Cadastrar novos itens</h2>
+                <?php if (!$id_edit): ?>
+                    <span class="badge bg-info">
+                        <i class="bi bi-info-circle"></i> Próximo código: <?= $proximo_codigo ?? '1' ?>
+                    </span>
+                <?php endif; ?>
             </div>
 
             <?php if ($erro): ?>
-                <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> <?= htmlspecialchars($erro) ?>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
+                </div>
             <?php endif; ?>
             
             <?php if ($sucesso): ?>
-                <div class="alert alert-success"><?= htmlspecialchars($sucesso) ?></div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle"></i> <?= htmlspecialchars($sucesso) ?>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
+                </div>
             <?php endif; ?>
             
             <div class="card mb-4">
@@ -248,26 +277,45 @@ try {
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label for="nome" class="form-label">Nome *</label>
-                                <input type="text" class="form-control" id="nome" name="nome" 
-                                       value="<?= htmlspecialchars($item['nome'] ?? '') ?>" required>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="nome" 
+                                       name="nome" 
+                                       value="<?= htmlspecialchars($item['nome'] ?? '') ?>" 
+                                       required
+                                       placeholder="Nome do item">
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="codigo_interno" class="form-label">Código do Item</label>
-                                <input type="text" class="form-control" id="codigo_interno" name="codigo_interno" 
-                                       value="<?= isset($item['codigo_interno']) ? htmlspecialchars($item['codigo_interno']) : ($proximo_codigo ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="codigo_interno" 
+                                       name="codigo_interno" 
+                                       value="<?= isset($item['codigo_interno']) ? htmlspecialchars($item['codigo_interno']) : ($proximo_codigo ?? '') ?>"
+                                       placeholder="Código interno (opcional)"
+                                       inputmode="numeric"
+                                       pattern="[0-9]*">
                             </div>
                             
                             <div class="col-12">
                                 <label for="descricao" class="form-label">Descrição</label>
-                                <textarea class="form-control" id="descricao" name="descricao" 
-                                          rows="2"><?= htmlspecialchars($item['descricao'] ?? '') ?></textarea>
+                                <textarea class="form-control" 
+                                          id="descricao" 
+                                          name="descricao" 
+                                          rows="2"
+                                          placeholder="Descrição detalhada do item (opcional)"><?= htmlspecialchars($item['descricao'] ?? '') ?></textarea>
                             </div>
                             
                             <div class="col-md-4">
                                 <label for="quantidade_minima" class="form-label">Quantidade Mínima</label>
-                                <input type="number" class="form-control" id="quantidade_minima" name="quantidade_minima" 
-                                       min="0" value="<?= $item['quantidade_minima'] ?? 0 ?>">
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="quantidade_minima" 
+                                       name="quantidade_minima" 
+                                       min="0" 
+                                       value="<?= $item['quantidade_minima'] ?? 0 ?>"
+                                       inputmode="numeric">
                             </div>
                             
                             <div class="col-md-4">
@@ -279,6 +327,9 @@ try {
                                     <option value="kg" <?= ($item['unidade'] ?? '') == 'kg' ? 'selected' : '' ?>>Quilograma</option>
                                     <option value="metro" <?= ($item['unidade'] ?? '') == 'metro' ? 'selected' : '' ?>>Metro</option>
                                     <option value="rolo" <?= ($item['unidade'] ?? '') == 'rolo' ? 'selected' : '' ?>>Rolo</option>
+                                    <option value="pacote" <?= ($item['unidade'] ?? '') == 'pacote' ? 'selected' : '' ?>>Pacote</option>
+                                    <option value="par" <?= ($item['unidade'] ?? '') == 'par' ? 'selected' : '' ?>>Par</option>
+                                    <option value="conjunto" <?= ($item['unidade'] ?? '') == 'conjunto' ? 'selected' : '' ?>>Conjunto</option>
                                 </select>
                             </div>
                             
@@ -286,9 +337,12 @@ try {
                                 <button type="submit" class="btn btn-primary me-2">
                                     <i class="bi bi-save"></i> <?= $id_edit ? 'Atualizar' : 'Cadastrar' ?>
                                 </button>
+                                <button type="reset" class="btn btn-danger me-2">
+                                    <i class="bi bi-x-circle"></i> Limpar
+                                </button>
                                 <?php if ($id_edit): ?>
                                     <a href="itens.php" class="btn btn-secondary">
-                                        <i class="bi bi-x-circle"></i> Cancelar
+                                        <i class="bi bi-arrow-left"></i> Voltar
                                     </a>
                                 <?php endif; ?>
                             </div>
@@ -296,6 +350,24 @@ try {
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('.navbar-toggler').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('nome').focus();
+        });
+
+        document.getElementById('codigo_interno').addEventListener('blur', function(e) {
+            if (!e.target.value.trim() && <?= !$id_edit ? 'true' : 'false' ?>) {
+                e.target.value = <?= $proximo_codigo ?? 1 ?>;
+            }
+        });
+    </script>
 </body>
 </html>

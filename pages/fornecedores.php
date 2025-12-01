@@ -123,8 +123,12 @@ try {
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link active dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link active dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -141,8 +145,12 @@ try {
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -160,8 +168,12 @@ try {
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="itensDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" 
+                       href="#" 
+                       id="itensDropdown" 
+                       role="button"
+                       data-bs-toggle="dropdown" 
+                       aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
@@ -204,6 +216,28 @@ try {
                 <h2 class="mb-0">Cadastrar novos Fornecedores</h2>
             </div>
 
+            <?php if ($erro): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= $erro ?>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
+                </div>
+            <?php endif; ?>
+
+            <?php if ($sucesso): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= $sucesso ?>
+                    <button type="button" 
+                            class="btn-close" 
+                            data-bs-dismiss="alert" 
+                            aria-label="Close">
+                    </button>
+                </div>
+            <?php endif; ?>
+
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><?= $id_edit ? 'Editar Fornecedor' : 'Cadastrar Novo Fornecedor' ?></h5>
@@ -214,47 +248,75 @@ try {
                         
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="nome" class="form-label">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" required
-                                    value="<?= htmlspecialchars($fornecedor['nome'] ?? '') ?>">
+                                <label for="nome" class="form-label">Nome *</label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="nome" 
+                                       name="nome" 
+                                       required
+                                       value="<?= htmlspecialchars($fornecedor['nome'] ?? '') ?>"
+                                       placeholder="Nome do fornecedor">
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="cnpj" class="form-label">CNPJ</label>
-                                <input type="text" class="form-control format-cnpj" id="cnpj" name="cnpj"
-                                    value="<?= htmlspecialchars($fornecedor['cnpj'] ?? '') ?>"
-                                    placeholder="00.000.000/0000-00">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="cnpj" 
+                                       name="cnpj"
+                                       value="<?= htmlspecialchars($fornecedor['cnpj'] ?? '') ?>"
+                                       placeholder="00.000.000/0000-00"
+                                       maxlength="18">
                             </div>
                             
                             <div class="col-12">
                                 <label for="endereco" class="form-label">Endereço</label>
-                                <input type="text" class="form-control" id="endereco" name="endereco"
-                                    value="<?= htmlspecialchars($fornecedor['endereco'] ?? '') ?>">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="endereco" 
+                                       name="endereco"
+                                       value="<?= htmlspecialchars($fornecedor['endereco'] ?? '') ?>"
+                                       placeholder="Rua, número, bairro, cidade">
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="telefone" class="form-label">Telefone</label>
-                                <input type="text" class="form-control" id="telefone" name="telefone"
-                                    value="<?= htmlspecialchars($fornecedor['telefone'] ?? '') ?>"
-                                    placeholder="(00) 00000-0000">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="telefone" 
+                                       name="telefone"
+                                       value="<?= htmlspecialchars($fornecedor['telefone'] ?? '') ?>"
+                                       placeholder="(00) 00000-0000"
+                                       maxlength="15">
                             </div>
                             
                             <div class="col-md-6">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    value="<?= htmlspecialchars($fornecedor['email'] ?? '') ?>">
+                                <input type="email" 
+                                       class="form-control" 
+                                       id="email" 
+                                       name="email"
+                                       value="<?= htmlspecialchars($fornecedor['email'] ?? '') ?>"
+                                       placeholder="email@exemplo.com">
                             </div>
                             
                             <div class="col-12">
                                 <label for="observacoes" class="form-label">Observações</label>
-                                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><?= htmlspecialchars($fornecedor['observacoes'] ?? '') ?></textarea>
+                                <textarea class="form-control" 
+                                          id="observacoes" 
+                                          name="observacoes" 
+                                          rows="3"
+                                          placeholder="Observações sobre o fornecedor"><?= htmlspecialchars($fornecedor['observacoes'] ?? '') ?></textarea>
                             </div>
                             
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-save"></i> <?= $id_edit ? 'Atualizar' : 'Cadastrar' ?>
                                 </button>
-                                <?php if($id_edit): ?>
+                                <button type="reset" class="btn btn-danger">
+                                    <i class="bi bi-x-circle"></i> Limpar
+                                </button>
+                                <?php if ($id_edit): ?>
                                     <a href="fornecedores.php" class="btn btn-secondary">
                                         <i class="bi bi-x"></i> Cancelar
                                     </a>
@@ -271,6 +333,35 @@ try {
     <script>
         document.querySelector('.navbar-toggler').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        document.getElementById('cnpj').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length <= 14) {
+                value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+                value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+                value = value.replace(/(\d{4})(\d)/, '$1-$2');
+            }
+            
+            e.target.value = value;
+        });
+
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    value = value.replace(/^(\d{2})(\d)/, '($1) $2');
+                    value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+            }
+            
+            e.target.value = value;
         });
     </script>
 </body>
