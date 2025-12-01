@@ -137,7 +137,7 @@ ob_start();
 
 <?php if ($id_edit > 0 || isset($_GET['new'])): ?>
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header bg-light">
             <h5 class="mb-0"><?= $id_edit > 0 ? 'Editar Item' : 'Cadastrar Novo Item' ?></h5>
         </div>
         <div class="card-body">
@@ -262,11 +262,15 @@ ob_start();
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        <a href="?edit=<?= $i['id'] ?>" class="btn btn-outline-primary">
+                                        <a href="?edit=<?= $f['id'] ?>" 
+                                            class="btn btn-warning"
+                                            title="Editar">
                                             <i class="bi bi-pencil"></i>
                                         </a>
-                                        <a href="?del=<?= $i['id'] ?>" class="btn btn-outline-danger" 
-                                           onclick="return confirm('Tem certeza que deseja excluir este item?')">
+                                        <a href="?del=<?= $f['id'] ?>" 
+                                            class="btn btn-danger" 
+                                            onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')"
+                                            title="Excluir">
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </div>
@@ -299,36 +303,4 @@ $(document).ready(function () {
 $conteudo = ob_get_clean();
 $titulo = "Estoque - Almoxarifado TI";
 
-?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $titulo ?? 'Almoxarifado TI' ?></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-</head>
-<body>
-    <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
-        
-        <div class="main-content">
-            <?= $conteudo ?? '' ?>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-        document.querySelector('.navbar-toggler')?.addEventListener('click', function () {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-    </script>
-</body>
-</html>
+include '../includes/template.php';
