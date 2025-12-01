@@ -83,49 +83,56 @@ usort($itens_alerta, function ($a, $b) {
             <hr class="bg-light">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="index.php">
+                    <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : '' ?>" 
+                    href="../index.php">
                         <i class="bi bi-speedometer2"></i> Dashboard
                     </a>
                 </li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#" 
-                       id="itensDropdown" 
-                       role="button" 
-                       data-bs-toggle="dropdown" 
-                       aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= (in_array(basename($_SERVER['PHP_SELF']), ['pages/fornecedores_cadastrados.php', 'pages/fornecedores.php'])) ? 'active' : '' ?>" 
+                    href="#" 
+                    id="fornecedoresDropdown" 
+                    role="button"
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Fornecedores
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="itensDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="fornecedoresDropdown">
                         <li>
-                            <a class="dropdown-item" href="pages/fornecedores_cadastrados.php">
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/fornecedores_cadastrados.php') ? 'active' : '' ?>" 
+                            href="pages/fornecedores_cadastrados.php">
                                 <i class="bi bi-truck"></i> Fornecedores Cadastrados
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="pages/fornecedores.php">
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/fornecedores.php') ? 'active' : '' ?>" 
+                            href="pages/fornecedores.php">
                                 <i class="bi bi-plus-square"></i> Cadastrar Fornecedor
                             </a>
                         </li>
                     </ul>
                 </li>
+                
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#" 
-                       id="itensDropdown" 
-                       role="button" 
-                       data-bs-toggle="dropdown" 
-                       aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= (in_array(basename($_SERVER['PHP_SELF']), ['pages/computadores_cadastrados.php', 'pages/computadores.php'])) ? 'active' : '' ?>" 
+                    href="#" 
+                    id="computadoresDropdown" 
+                    role="button"
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
                         <i class="bi bi-laptop"></i> Computadores
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="itensDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="computadoresDropdown">
                         <li>
-                            <a class="dropdown-item" href="pages/computadores_cadastrados.php">
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/computadores_cadastrados.php') ? 'active' : '' ?>" 
+                            href="pages/computadores_cadastrados.php">
                                 <i class="bi bi-laptop"></i> Computadores
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="pages/computadores.php">
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/computadores.php') ? 'active' : '' ?>" 
+                            href="pages/computadores.php">
                                 <i class="bi bi-plus-square"></i> Cadastrar Computadores
                             </a>
                         </li>
@@ -133,22 +140,24 @@ usort($itens_alerta, function ($a, $b) {
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" 
-                       href="#" 
-                       id="itensDropdown" 
-                       role="button" 
-                       data-bs-toggle="dropdown" 
-                       aria-expanded="false">
+                    <a class="nav-link dropdown-toggle <?= (in_array(basename($_SERVER['PHP_SELF']), ['pages/itens_cadastrados.php', 'pages/itens.php'])) ? 'active' : '' ?>" 
+                    href="#" 
+                    id="itensDropdown" 
+                    role="button"
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
                         <i class="bi bi-box-seam"></i> Itens
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="itensDropdown">
                         <li>
-                            <a class="dropdown-item" href="pages/estoque.php">
-                                <i class="bi bi-archive"></i> Estoque
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/itens_cadastrados.php') ? 'active' : '' ?>" 
+                            href="pages/itens_cadastrados.php">
+                                <i class="bi bi-archive"></i> Itens Cadastrados
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="pages/itens.php">
+                            <a class="dropdown-item <?= (basename($_SERVER['PHP_SELF']) == 'pages/itens.php') ? 'active' : '' ?>" 
+                            href="pages/itens.php">
                                 <i class="bi bi-plus-square"></i> Cadastrar Itens
                             </a>
                         </li>
@@ -156,13 +165,22 @@ usort($itens_alerta, function ($a, $b) {
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/entrada.php">
+                    <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages/estoque.php') ? 'active' : '' ?>" 
+                    href="pages/estoque.php">
+                        <i class="bi bi-archive"></i> Estoque
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages/entrada.php') ? 'active' : '' ?>" 
+                    href="pages/entrada.php">
                         <i class="bi bi-box-arrow-in-down"></i> Entradas
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="pages/saida.php">
+                    <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) == 'pages/saida.php') ? 'active' : '' ?>" 
+                    href="pages/saida.php">
                         <i class="bi bi-box-arrow-up"></i> Saídas
                     </a>
                 </li>
