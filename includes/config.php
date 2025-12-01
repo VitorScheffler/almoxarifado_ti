@@ -2,7 +2,7 @@
 session_start();
 
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'almox_ti');
+define('DB_NAME', 'estoque_ti');
 define('DB_USER', 'root');
 define('DB_PASS', 'Cooper123@');
 

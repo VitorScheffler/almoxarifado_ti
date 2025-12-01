@@ -320,7 +320,9 @@ ob_start();
             </div>
         <?php else: ?>
             <div class="alert alert-info mb-0">
-                Nenhum computador cadastrado. <a href="computadores.php">Cadastre seu primeiro computador</a>.
+                <i class="bi bi-info-circle"></i> 
+                Nenhum computador cadastrado. 
+                <a href="computadores.php" class="alert-link">Cadastre seu primeiro computador</a>.
             </div>
         <?php endif; ?>
     </div>
