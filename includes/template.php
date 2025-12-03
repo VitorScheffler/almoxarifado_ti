@@ -12,8 +12,8 @@
 </head>
 <body>
     <div class="d-flex">
-        <?php include '../includes/menu.php'; ?>
-        
+        <?php include __DIR__ . '/menu.php'; ?>
+
         <div class="main-content">
             <?= $conteudo ?? '' ?>
         </div>
