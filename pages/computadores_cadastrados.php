@@ -322,30 +322,24 @@ ob_start();
                                 </td>
                                 <td>
                                     <?php if (!empty($c['usuario'])): ?>
-                                        <strong><?= htmlspecialchars($c['usuario']) ?></strong>
+                                        <?= htmlspecialchars($c['usuario']) ?>
                                     <?php else: ?>
                                         <span class="text-muted">Não informado</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
-                                    <span class="badge bg-success">
-                                        <?= htmlspecialchars($c['patrimonio_computador']) ?>
-                                    </span>
+                                    <?= htmlspecialchars($c['patrimonio_computador']) ?>
                                 </td>
                                 <td>
                                     <?php if (!empty($c['patrimonio_monitor1'])): ?>
-                                        <span class="badge bg-secondary">
                                             <?= htmlspecialchars($c['patrimonio_monitor1']) ?>
-                                        </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php if (!empty($c['patrimonio_monitor2'])): ?>
-                                        <span class="badge bg-secondary">
                                             <?= htmlspecialchars($c['patrimonio_monitor2']) ?>
-                                        </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>

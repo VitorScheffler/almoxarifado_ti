@@ -346,9 +346,9 @@ ob_start();
                     </thead>
                     <tbody>
                         <?php foreach ($itens as $i): ?>
-                            <tr class="<?= $i['status_estoque'] == 'danger' ? 'table-danger' : ($i['status_estoque'] == 'alert' ? 'table-warning' : '') ?>">
+                            <tr>
                                 <td>
-                                    <strong><?= htmlspecialchars($i['nome']) ?></strong>
+                                    <?= htmlspecialchars($i['nome']) ?>
                                     <?php if (!empty($i['descricao'])): ?>
                                         <br>
                                         <small class="text-muted">
@@ -359,9 +359,7 @@ ob_start();
                                 </td>
                                 <td>
                                     <?php if (!empty($i['codigo_interno'])): ?>
-                                        <span class="badge bg-info text-dark">
                                             <?= htmlspecialchars($i['codigo_interno']) ?>
-                                        </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>
@@ -372,20 +370,14 @@ ob_start();
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-secondary">
                                         <?= $i['quantidade_minima'] ?>
-                                    </span>
                                 </td>
                                 <td>
-                                    <span class="badge bg-light text-dark">
                                         <?= htmlspecialchars($i['unidade']) ?>
-                                    </span>
                                 </td>
                                 <td>
                                     <?php if (!empty($i['categoria'])): ?>
-                                        <span class="badge bg-light text-dark border">
                                             <?= htmlspecialchars($i['categoria']) ?>
-                                        </span>
                                     <?php else: ?>
                                         <span class="text-muted">-</span>
                                     <?php endif; ?>

@@ -269,7 +269,7 @@ ob_start();
                         <?php foreach ($fornecedores as $f): ?>
                             <tr>
                                 <td>
-                                    <strong><?= htmlspecialchars($f['nome']) ?></strong>
+                                    <?= htmlspecialchars($f['nome']) ?>
                                     <?php if (!empty($f['observacoes'])): ?>
                                         <br>
                                         <small class="text-muted">
@@ -280,9 +280,7 @@ ob_start();
                                 </td>
                                 <td>
                                     <?php if (!empty($f['cnpj'])): ?>
-                                        <span class="badge bg-info text-dark">
-                                            <?= preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $f['cnpj']) ?>
-                                        </span>
+                                        <?= preg_replace('/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/', '$1.$2.$3/$4-$5', $f['cnpj']) ?>
                                     <?php else: ?>
                                         <span class="text-muted">Não informado</span>
                                     <?php endif; ?>
