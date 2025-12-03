@@ -185,6 +185,13 @@ usort($itens_alerta, function ($a, $b) {
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link <?= ($pagina_atual ?? '') == 'pages/configuracoes.php' ? 'active' : '' ?>" 
+                    href="pages/configuracoes.php">
+                        <i class="bi bi-gear"></i> Configurações
+                    </a>
+                </li>
+
                 <li class="nav-item mt-4">
                     <a class="nav-link text-danger" href="auth/logout.php">
                         <i class="bi bi-box-arrow-right"></i> Sair

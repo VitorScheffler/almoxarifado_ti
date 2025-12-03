@@ -105,6 +105,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link <?= ($pagina_atual ?? '') == 'configuracoes.php' ? 'active' : '' ?>" 
+               href="configuracoes.php">
+                <i class="bi bi-gear"></i> Configurações
+            </a>
+        </li>
+
         <li class="nav-item mt-4">
             <a class="nav-link text-danger" href="<?= $auth_path ?>logout.php">
                 <i class="bi bi-box-arrow-right"></i> Sair
