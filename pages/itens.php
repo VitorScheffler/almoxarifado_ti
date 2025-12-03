@@ -145,10 +145,7 @@ ob_start();
     <h2 class="mb-0"><?= $id_edit ? 'Editar Item' : 'Cadastrar Novo Item' ?></h2>
     <?php if (!$id_edit): ?>
     <div class="d-flex align-items-center">
-        <span class="badge bg-info text-dark me-2">
-            <i class="bi bi-info-circle"></i> Próximo código: <?= $proximo_codigo ?>
-        </span>
-        <a href="itens_cadastrados.php" class="btn btn-outline-primary btn-sm">
+        <a href="itens_cadastrados.php" class="btn btn-outline-primary">
             <i class="bi bi-list-ul"></i> Ver Itens
         </a>
     </div>
