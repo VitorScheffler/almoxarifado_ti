@@ -113,7 +113,7 @@
         </li>
 
         <li class="nav-item mt-4">
-            <a class="nav-link text-danger" href="<?= $auth_path ?>logout.php">
+            <a class="nav-link text-danger" href="<?= $auth_path ?>../auth/logout.php">
                 <i class="bi bi-box-arrow-right"></i> Sair
             </a>
         </li>
