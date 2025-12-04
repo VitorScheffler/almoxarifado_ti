@@ -316,9 +316,7 @@ ob_start();
                         <?php foreach ($computadores as $c): ?>
                             <tr>
                                 <td>
-                                    <span class="badge bg-info text-dark">
-                                        <?= htmlspecialchars($c['setor']) ?>
-                                    </span>
+                                    <?= htmlspecialchars($c['setor']) ?>
                                 </td>
                                 <td>
                                     <?php if (!empty($c['usuario'])): ?>
