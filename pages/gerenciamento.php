@@ -54,8 +54,8 @@ ob_start();
 <div class="row">
     <!-- Painel de Estatísticas -->
     <div class="col-md-12 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-primary text-white border-0">
+        <div class="card border">
+            <div class="card-header bg-white border-bottom">
                 <h5 class="mb-0">
                     <i class="bi bi-bar-chart me-2"></i> Estatísticas do Sistema
                 </h5>
@@ -100,55 +100,68 @@ ob_start();
     </div>
 
     <!-- Cards de Ação -->
-    <div class="col-md-4 mb-4">
-        <a href="gerenciamento_categorias.php" class="text-decoration-none">
-            <div class="card border-0 shadow-sm h-100 card-hover">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="bi bi-tags text" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h5 class="card-title mb-2">Categorias</h5>
-                    <p class="card-text text-muted mb-0">Gerencie as categorias dos itens</p>
-                    <div class="mt-3">
-                        <span class="badge bg-primary rounded-pill"><?php echo $total_categorias; ?> ativas</span>
-                    </div>
-                </div>
+    <div class="col-md-12 mb-4">
+        <div class="card border">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0">
+                    <i class="bi bi-gear me-2"></i> Gerenciamento do Sistema
+                </h5>
             </div>
-        </a>
-    </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <a href="gerenciamento_categorias.php" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <i class="bi bi-tags" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title mb-2">Categorias</h5>
+                                    <p class="card-text text-muted mb-0">Gerencie as categorias dos itens</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-primary rounded-pill"><?php echo $total_categorias; ?> ativas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
 
-    <div class="col-md-4 mb-4">
-        <a href="gerenciamento_setores.php" class="text-decoration-none">
-            <div class="card border-2 shadow-sm h-100 card-hover">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="bi bi-building text" style="font-size: 2.5rem;"></i>
+                    <div class="col-md-4 mb-4">
+                        <a href="gerenciamento_setores.php" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <i class="bi bi-building" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title mb-2">Setores</h5>
+                                    <p class="card-text text-muted mb-0">Administre os setores da empresa</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-primary rounded-pill"><?php echo $total_setores; ?> cadastrados</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <h5 class="card-title mb-2">Setores</h5>
-                    <p class="card-text text-muted mb-0">Administre os setores da empresa</p>
-                    <div class="mt-3">
-                        <span class="badge bg-primary rounded-pill"><?php echo $total_setores; ?> cadastrados</span>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
 
-    <div class="col-md-4 mb-4">
-        <a href="gerenciamento_sistema.php" class="text-decoration-none">
-            <div class="card border-0 shadow-sm h-100 card-hover">
-                <div class="card-body text-center p-4">
-                    <div class="mb-3">
-                        <i class="bi bi-gear text" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h5 class="card-title mb-2">Sistema</h5>
-                    <p class="card-text text-muted mb-0">Configure parâmetros do sistema</p>
-                    <div class="mt-3">
-                        <span class="badge bg-primary rounded-pill">Configurações</span>
+                    <div class="col-md-4 mb-4">
+                        <a href="gerenciamento_sistema.php" class="text-decoration-none">
+                            <div class="card border-0 shadow-sm h-100 card-hover">
+                                <div class="card-body text-center p-4">
+                                    <div class="mb-3">
+                                        <i class="bi bi-gear" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h5 class="card-title mb-2">Sistema</h5>
+                                    <p class="card-text text-muted mb-0">Configure parâmetros do sistema</p>
+                                    <div class="mt-3">
+                                        <span class="badge bg-primary rounded-pill">Configurações</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
-        </a>
+        </div>
     </div>
 </div>
 
