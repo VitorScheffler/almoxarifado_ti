@@ -55,26 +55,6 @@ function carregarConfiguracoesDoBanco($pdo) {
             }
         }
         
-        // Define valores padrão se não existirem no banco
-        // $configuracoes_padrao = [
-        //     'ldap_server' => 'ldap://192.168.0.6',
-        //     'ldap_port' => '389',
-        //     'ldap_domain' => 'coopershoes.com.br',
-        //     'ldap_base_dn' => 'DC=coopershoes,DC=com,DC=br',
-        //     'ldap_grupo' => 'CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br',
-        //     'empresa_nome' => 'Coopershoes',
-        //     'sistema_nome' => 'Almoxarifado TI',
-        //     'empresa_logo' => '../assets/img/Coopershoes.png',
-        //     'timezone' => 'America/Sao_Paulo'
-        // ];
-        
-        // foreach ($configuracoes_padrao as $chave => $valor) {
-        //     $chave_constante = strtoupper($chave);
-        //     if (!defined($chave_constante)) {
-        //         define($chave_constante, $valor);
-        //     }
-        // }
-        
         // Define timezone
         if (defined('TIMEZONE')) {
             date_default_timezone_set(TIMEZONE);
