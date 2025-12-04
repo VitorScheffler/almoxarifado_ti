@@ -10,8 +10,6 @@ function limparDados($dado, $tipo = 'texto') {
     $dado = trim($dado);
     switch ($tipo) {
         case 'numero':
-            $dado = preg_replace('/[^0-9]/', '', $dado);
-            break;
         case 'patrimonio':
             $dado = preg_replace('/[^0-9]/', '', $dado);
             break;
@@ -24,7 +22,7 @@ function limparDados($dado, $tipo = 'texto') {
 // Buscar setores para o dropdown
 $setores = [];
 try {
-    $stmt = $pdo->query("SELECT id, setor FROM setor ORDER BY setor");
+    $stmt = $pdo->query("SELECT id, setor FROM setores ORDER BY setor");
     $setores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $erro = "Erro ao buscar setores: " . $e->getMessage();
@@ -63,11 +61,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $setor_nome = '';
     if ($setor_id > 0) {
         try {
-            $stmt = $pdo->prepare("SELECT setor FROM setor WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT setor FROM setores WHERE id = ?");
             $stmt->execute([$setor_id]);
             $setor_data = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($setor_data) {
                 $setor_nome = $setor_data['setor'];
+            } else {
+                $erro = "Setor selecionado não encontrado.";
             }
         } catch (PDOException $e) {
             $erro = "Erro ao buscar setor: " . $e->getMessage();
@@ -75,16 +75,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Validações
-    if ($setor_id <= 0) {
-        $erro = "O campo setor é obrigatório.";
-    } elseif (empty($patrimonio_computador)) {
-        $erro = "O campo patrimônio do computador é obrigatório.";
-    } elseif (strlen($patrimonio_computador) > 100) {
-        $erro = "O patrimônio do computador deve ter no máximo 100 caracteres.";
-    } else {
+    if (empty($erro)) {
+        if ($setor_id <= 0) {
+            $erro = "O campo setor é obrigatório.";
+        } elseif (empty($patrimonio_computador)) {
+            $erro = "O campo patrimônio do computador é obrigatório.";
+        } elseif (strlen($patrimonio_computador) > 100) {
+            $erro = "O patrimônio do computador deve ter no máximo 100 caracteres.";
+        }
+    }
+
+    // Se não há erros, salvar
+    if (empty($erro)) {
         try {
             if ($id > 0) {
-                // Verificar duplicação de patrimônio
+                // Verificar duplicação de patrimônio (exceto o próprio registro)
                 $stmt = $pdo->prepare("SELECT id FROM computadores WHERE patrimonio_computador = ? AND id != ?");
                 $stmt->execute([$patrimonio_computador, $id]);
                 if ($stmt->fetch()) {
@@ -95,6 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute([$setor_nome, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes, $id]);
                     $sucesso = "Computador atualizado com sucesso!";
                     $id_edit = 0;
+                    $computador = null; // Limpar dados do formulário
                 }
             } else {
                 // Verificar duplicação de patrimônio
@@ -108,11 +114,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute([$setor_nome, $patrimonio_computador, $patrimonio_monitor1, $patrimonio_monitor2, $usuario, $observacoes]);
                     $sucesso = "Computador cadastrado com sucesso!";
                 }
-            }
-            
-            // Limpar dados do formulário após sucesso
-            if (empty($erro)) {
-                $computador = null;
             }
         } catch (PDOException $e) {
             $erro = "Erro ao salvar computador: " . $e->getMessage();
@@ -418,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, false);
     });
 
-    // Verificar duplicação de patrimônio em tempo real
+    // Verificação de patrimônio duplicado (opcional - remover se não tiver o arquivo)
     const patrimonioInput = document.getElementById('patrimonio_computador');
     if (patrimonioInput) {
         patrimonioInput.addEventListener('blur', function() {
@@ -426,18 +427,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = document.querySelector('input[name="id"]')?.value || 0;
             
             if (patrimonio.length > 0) {
-                fetch(`../api/verificar_patrimonio.php?patrimonio=${patrimonio}&id=${id}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.existe) {
-                            this.setCustomValidity('Este patrimônio já está em uso.');
-                            this.classList.add('is-invalid');
-                        } else {
-                            this.setCustomValidity('');
-                            this.classList.remove('is-invalid');
-                        }
-                    })
-                    .catch(error => console.error('Erro:', error));
+                // Esta parte requer o arquivo ../api/verificar_patrimonio.php
+                // Remova se não tiver o arquivo ou implemente conforme necessário
+                console.log('Verificando patrimônio:', patrimonio, 'ID:', id);
             }
         });
     }
@@ -450,3 +442,4 @@ $titulo = "Computadores Cadastrados - Sistema Almoxarifado";
 $pagina_atual = 'computadores_cadastrados.php';
 
 include '../includes/template.php';
+?>

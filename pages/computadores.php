@@ -21,7 +21,7 @@ function limparDados($dado, $tipo = 'texto') {
 // Buscar setores para o dropdown
 $setores = [];
 try {
-    $stmt = $pdo->query("SELECT id, setor FROM setor ORDER BY setor");
+    $stmt = $pdo->query("SELECT id, setor FROM setores ORDER BY setor");
     $setores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $erro = "Erro ao buscar setores: " . $e->getMessage();
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $setor_nome = '';
     if ($setor_id > 0) {
         try {
-            $stmt = $pdo->prepare("SELECT setor FROM setor WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT setor FROM setores WHERE id = ?");
             $stmt->execute([$setor_id]);
             $setor_data = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($setor_data) {

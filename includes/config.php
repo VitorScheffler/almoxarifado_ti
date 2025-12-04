@@ -2,7 +2,7 @@
 session_start();
 
 // Caminho do arquivo de configurações do banco
-$config_file = __DIR__ . '/../config_sistema.json';
+$config_file = __DIR__ . '/../config/config_sistema.json';
 
 // Se o arquivo de configuração existir, carrega dele
 if (file_exists($config_file)) {

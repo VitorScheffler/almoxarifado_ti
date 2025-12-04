@@ -269,7 +269,7 @@ ob_start();
                                                     <?php endif; ?>
                                                     <?php if ($count_computadores > 0): ?>
                                                         <br>
-                                                        <small class="text-info">
+                                                        <small>
                                                             <i class="bi bi-pc-display me-1"></i>
                                                             <?php echo $count_computadores; ?> computador(es)
                                                         </small>
@@ -298,12 +298,12 @@ ob_start();
                                         <td class="pe-3">
                                             <div class="btn-group btn-group-sm">
                                                 <a href="?editar_setor=<?php echo $setor['id']; ?>" 
-                                                   class="btn btn-outline-warning"
+                                                   class="btn btn-warning"
                                                    title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
                                                 <a href="?excluir_setor=<?php echo $setor['id']; ?>" 
-                                                   class="btn btn-outline-danger" 
+                                                   class="btn btn-danger" 
                                                    onclick="return confirm('Tem certeza que deseja excluir o setor <?php echo addslashes($setor['setor']); ?>?')"
                                                    title="Excluir">
                                                     <i class="bi bi-trash"></i>
@@ -328,28 +328,6 @@ ob_start();
         </div>
     </div>
 </div>
-
-<script>
-// Máscara para telefone
-document.addEventListener('DOMContentLoaded', function() {
-    const telefoneInput = document.querySelector('input[name="telefone"]');
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 10) {
-                value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-            } else if (value.length > 6) {
-                value = value.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
-            } else if (value.length > 2) {
-                value = value.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
-            } else if (value.length > 0) {
-                value = value.replace(/^(\d*)$/, '($1');
-            }
-            e.target.value = value;
-        });
-    }
-});
-</script>
 
 <?php
 $conteudo = ob_get_clean();
