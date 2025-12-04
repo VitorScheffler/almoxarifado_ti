@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($usuario === '' || $senha === '') {
         $mensagem = "Por favor, preencha todos os campos.";
     } else {
-        // Usa as constantes do config.php
+        // Usa as constantes do config.php (que agora vêm do banco)
         $dominio       = LDAP_DOMAIN;
         $servidor_ldap = LDAP_SERVER;
         $porta_ldap    = LDAP_PORT;

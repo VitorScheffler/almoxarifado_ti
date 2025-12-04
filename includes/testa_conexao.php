@@ -1,15 +1,19 @@
 <?php
-session_start();
+// Inclui config primeiro para ter acesso às funções
+require 'config.php';
 
 if (!isset($_SESSION['usuario'])) {
     echo json_encode(['success' => false, 'message' => 'Não autenticado']);
     exit;
 }
 
-$db_host = $_POST['db_host'] ?? 'localhost';
-$db_name = $_POST['db_name'] ?? 'estoque_ti';
-$db_user = $_POST['db_user'] ?? 'root';
-$db_pass = $_POST['db_pass'] ?? '';
+header('Content-Type: application/json');
+
+// Recebe dados do formulário ou usa do arquivo de configuração
+$db_host = $_POST['db_host'] ?? DB_HOST;
+$db_name = $_POST['db_name'] ?? DB_NAME;
+$db_user = $_POST['db_user'] ?? DB_USER;
+$db_pass = $_POST['db_pass'] ?? DB_PASS;
 
 try {
     $test_pdo = new PDO(

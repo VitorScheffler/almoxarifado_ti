@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Caminho do arquivo de configurações
+// Caminho do arquivo de configurações do banco
 $config_file = __DIR__ . '/../config_sistema.json';
 
 // Se o arquivo de configuração existir, carrega dele
@@ -12,38 +12,13 @@ if (file_exists($config_file)) {
     define('DB_NAME', $config['db_name'] ?? 'estoque_ti');
     define('DB_USER', $config['db_user'] ?? 'root');
     define('DB_PASS', $config['db_pass'] ?? 'Cooper123@');
-    
-    // Configurações LDAP (usadas no login)
-    define('LDAP_SERVER', $config['ldap_server'] ?? 'ldap://192.168.0.6');
-    define('LDAP_PORT', $config['ldap_port'] ?? 389);
-    define('LDAP_DOMAIN', $config['ldap_domain'] ?? 'coopershoes.com.br');
-    define('LDAP_BASE_DN', $config['ldap_base_dn'] ?? 'DC=coopershoes,DC=com,DC=br');
-    define('LDAP_GRUPO', $config['ldap_grupo'] ?? 'CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br');
-    
-    // Configurações gerais
-    define('EMPRESA_NOME', $config['empresa_nome'] ?? 'Coopershoes');
-    define('SISTEMA_NOME', $config['sistema_nome'] ?? 'Almoxarifado TI');
-    define('EMPRESA_LOGO', $config['empresa_logo'] ?? '../assets/img/Coopershoes.png');
-    define('TIMEZONE', $config['timezone'] ?? 'America/Sao_Paulo');
 } else {
     // Valores padrão
     define('DB_HOST', 'localhost');
     define('DB_NAME', 'estoque_ti');
     define('DB_USER', 'root');
     define('DB_PASS', 'Cooper123@');
-    define('LDAP_SERVER', 'ldap://192.168.0.6');
-    define('LDAP_PORT', 389);
-    define('LDAP_DOMAIN', 'coopershoes.com.br');
-    define('LDAP_BASE_DN', 'DC=coopershoes,DC=com,DC=br');
-    define('LDAP_GRUPO', 'CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br');
-    define('EMPRESA_NOME', 'Coopershoes');
-    define('SISTEMA_NOME', 'Almoxarifado TI');
-    define('EMPRESA_LOGO', '../assets/img/Coopershoes.png');
-    define('TIMEZONE', 'America/Sao_Paulo');
 }
-
-// Define timezone
-date_default_timezone_set(TIMEZONE);
 
 // Conexão com banco de dados
 try {
@@ -56,8 +31,71 @@ try {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
         ]
     );
+    
+    // Carrega configurações do sistema do banco de dados
+    carregarConfiguracoesDoBanco($pdo);
+    
 } catch (PDOException $e) {
     die("Erro na conexão com o banco de dados: " . $e->getMessage());
+}
+
+/**
+ * Carrega configurações do sistema da tabela config_sistema
+ */
+function carregarConfiguracoesDoBanco($pdo) {
+    try {
+        $stmt = $pdo->query("SELECT chave, valor FROM config_sistema");
+        $configs = $stmt->fetchAll();
+        
+        foreach ($configs as $config) {
+            // Verifica se a constante já não foi definida antes
+            $chave_constante = strtoupper($config['chave']);
+            if (!defined($chave_constante)) {
+                define($chave_constante, $config['valor']);
+            }
+        }
+        
+        // Define valores padrão se não existirem no banco
+        // $configuracoes_padrao = [
+        //     'ldap_server' => 'ldap://192.168.0.6',
+        //     'ldap_port' => '389',
+        //     'ldap_domain' => 'coopershoes.com.br',
+        //     'ldap_base_dn' => 'DC=coopershoes,DC=com,DC=br',
+        //     'ldap_grupo' => 'CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br',
+        //     'empresa_nome' => 'Coopershoes',
+        //     'sistema_nome' => 'Almoxarifado TI',
+        //     'empresa_logo' => '../assets/img/Coopershoes.png',
+        //     'timezone' => 'America/Sao_Paulo'
+        // ];
+        
+        // foreach ($configuracoes_padrao as $chave => $valor) {
+        //     $chave_constante = strtoupper($chave);
+        //     if (!defined($chave_constante)) {
+        //         define($chave_constante, $valor);
+        //     }
+        // }
+        
+        // Define timezone
+        if (defined('TIMEZONE')) {
+            date_default_timezone_set(TIMEZONE);
+        } else {
+            date_default_timezone_set('America/Sao_Paulo');
+        }
+        
+    } catch (Exception $e) {
+        // Se não conseguir carregar do banco, usa valores padrão
+        if (!defined('LDAP_SERVER')) define('LDAP_SERVER', 'ldap://192.168.0.6');
+        if (!defined('LDAP_PORT')) define('LDAP_PORT', 389);
+        if (!defined('LDAP_DOMAIN')) define('LDAP_DOMAIN', 'coopershoes.com.br');
+        if (!defined('LDAP_BASE_DN')) define('LDAP_BASE_DN', 'DC=coopershoes,DC=com,DC=br');
+        if (!defined('LDAP_GRUPO')) define('LDAP_GRUPO', 'CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br');
+        if (!defined('EMPRESA_NOME')) define('EMPRESA_NOME', 'Coopershoes');
+        if (!defined('SISTEMA_NOME')) define('SISTEMA_NOME', 'Almoxarifado TI');
+        if (!defined('EMPRESA_LOGO')) define('EMPRESA_LOGO', '../assets/img/Coopershoes.png');
+        if (!defined('TIMEZONE')) define('TIMEZONE', 'America/Sao_Paulo');
+        
+        date_default_timezone_set(TIMEZONE);
+    }
 }
 
 // Redireciona para login se não estiver autenticado
