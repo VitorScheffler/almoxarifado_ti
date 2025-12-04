@@ -108,7 +108,7 @@ ob_start();
                         <i class="bi bi-tags text" style="font-size: 2.5rem;"></i>
                     </div>
                     <h5 class="card-title mb-2">Categorias</h5>
-                    <p class="card-text text-muted mb-0">Gerencie as categorias dos itens do almoxarifado</p>
+                    <p class="card-text text-muted mb-0">Gerencie as categorias dos itens</p>
                     <div class="mt-3">
                         <span class="badge bg-primary rounded-pill"><?php echo $total_categorias; ?> ativas</span>
                     </div>

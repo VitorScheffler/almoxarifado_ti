@@ -143,12 +143,12 @@ ob_start();
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-lg-12">
         <!-- Formulário de Setor -->
-        <div class="card border-0 shadow-sm mb-4">
+        <div class="card border-0 mb-4">
             <div class="card-header bg-white border-bottom">
                 <h5 class="mb-0">
-                    <i class="bi bi-building text-success me-2"></i>
+                    <i class="bi bi-building me-2"></i>
                     <?php echo $setor_editar ? 'Editar Setor' : 'Novo Setor'; ?>
                 </h5>
             </div>
@@ -207,8 +207,8 @@ ob_start();
                                maxlength="100">
                     </div>
                     
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-success">
+                    <div class="gap-2">
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i> 
                             <?php echo $setor_editar ? 'Atualizar Setor' : 'Cadastrar Setor'; ?>
                         </button>
@@ -223,12 +223,12 @@ ob_start();
         </div>
     </div>
 
-    <div class="col-lg-8">
-        <!-- Lista de Setores -->
-        <div class="card border-0 shadow-sm">
+    <!-- Lista de Setores -->
+    <div class="col-lg-12">
+        <div class="card border-0">
             <div class="card-header bg-white border-bottom">
                 <h5 class="mb-0">
-                    <i class="bi bi-list-check text-primary me-2"></i>
+                    <i class="bi bi-list-check me-2"></i>
                     Setores Cadastrados
                     <span class="badge bg-primary rounded-pill ms-2"><?php echo count($setores); ?></span>
                 </h5>
@@ -319,7 +319,7 @@ ob_start();
                     <div class="text-center py-5">
                         <i class="bi bi-building text-muted" style="font-size: 3rem;"></i>
                         <p class="text-muted mt-3 mb-0">Nenhum setor cadastrado</p>
-                        <a href="gerenciamento_setores.php" class="btn btn-sm btn-success mt-3">
+                        <a href="gerenciamento_setores.php" class="btn btn-sm btn-primary mt-3">
                             <i class="bi bi-plus me-1"></i> Cadastrar Primeiro Setor
                         </a>
                     </div>

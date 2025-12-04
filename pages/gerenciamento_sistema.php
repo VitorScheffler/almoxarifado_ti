@@ -22,231 +22,218 @@ ob_start();
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card border-0 shadow-sm">
+        <!-- Configurações da Empresa -->
+        <div class="card border-0 mb-4">
             <div class="card-header bg-white border-bottom">
-                <ul class="nav nav-pills nav-fill" id="configTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="geral-tab" data-bs-toggle="tab" data-bs-target="#geral" type="button">
-                            <i class="bi bi-building me-2"></i> Empresa
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="banco-tab" data-bs-toggle="tab" data-bs-target="#banco" type="button">
-                            <i class="bi bi-database me-2"></i> Banco de Dados
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="ldap-tab" data-bs-toggle="tab" data-bs-target="#ldap" type="button">
-                            <i class="bi bi-person-badge me-2"></i> LDAP
-                        </button>
-                    </li>
-                </ul>
+                <h5 class="mb-0">
+                    <i class="bi bi-building me-2"></i>
+                    Configurações da Empresa
+                </h5>
             </div>
-            
             <div class="card-body">
-                <div class="tab-content" id="configTabContent">
-                    <!-- Configurações Gerais da Empresa -->
-                    <div class="tab-pane fade show active" id="geral" role="tabpanel">
-                        <form method="post" class="needs-validation" novalidate>
-                            <input type="hidden" name="acao" value="salvar_geral">
-                            
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <label class="form-label">Nome da Empresa *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="empresa_nome" 
-                                           value="<?= htmlspecialchars(EMPRESA_NOME) ?>" 
-                                           required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Nome do Sistema *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="sistema_nome" 
-                                           value="<?= htmlspecialchars(SISTEMA_NOME) ?>" 
-                                           required>
-                                </div>
-                                
-                                <div class="col-md-12">
-                                    <label class="form-label">Caminho do Logo</label>
-                                    <div class="input-group">
-                                        <input type="text" 
-                                               class="form-control" 
-                                               name="empresa_logo" 
-                                               value="<?= htmlspecialchars(EMPRESA_LOGO) ?>"
-                                               placeholder="Ex: assets/img/logo.png">
-                                        <button type="button" class="btn btn-outline-secondary" onclick="previewLogo()">
-                                            <i class="bi bi-eye me-1"></i> Visualizar
-                                        </button>
-                                    </div>
-                                    <small class="form-text text-muted">Caminho relativo para o arquivo de logo</small>
-                                    <div id="logoPreview" class="mt-2"></div>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Fuso Horário *</label>
-                                    <select class="form-select" name="timezone" required>
-                                        <?php
-                                        $timezones = [
-                                            'America/Sao_Paulo' => 'São Paulo',
-                                            'America/Manaus' => 'Manaus',
-                                            'America/Bahia' => 'Bahia',
-                                            'America/Fortaleza' => 'Fortaleza',
-                                            'America/Recife' => 'Recife',
-                                            'America/Rio_Branco' => 'Rio Branco'
-                                        ];
-                                        
-                                        foreach ($timezones as $tz => $label):
-                                        ?>
-                                            <option value="<?= $tz ?>" <?= TIMEZONE == $tz ? 'selected' : '' ?>>
-                                                <?= $label ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <hr class="my-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save me-1"></i> Salvar Configurações
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                <form method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="acao" value="salvar_geral">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nome da Empresa *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="empresa_nome" 
+                               value="<?= htmlspecialchars(EMPRESA_NOME) ?>" 
+                               required>
                     </div>
                     
-                    <!-- Banco de Dados -->
-                    <div class="tab-pane fade" id="banco" role="tabpanel">
-                        <form method="post" class="needs-validation" novalidate>
-                            <input type="hidden" name="acao" value="salvar_banco">
-                            
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <label class="form-label">Host do Banco *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="db_host" 
-                                           value="<?= htmlspecialchars(DB_HOST) ?>" 
-                                           required
-                                           placeholder="localhost">
-                                    <small class="form-text text-muted">Ex: localhost, 127.0.0.1, mysql.meuservidor.com</small>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Nome do Banco *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="db_name" 
-                                           value="<?= htmlspecialchars(DB_NAME) ?>" 
-                                           required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Usuário *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="db_user" 
-                                           value="<?= htmlspecialchars(DB_USER) ?>" 
-                                           required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Senha</label>
-                                    <div class="input-group">
-                                        <input type="password" 
-                                               class="form-control" 
-                                               name="db_pass" 
-                                               value="<?= htmlspecialchars(DB_PASS) ?>"
-                                               id="db_pass">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('db_pass')">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <hr class="my-4">
-                                    <div class="d-flex gap-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-save me-1"></i> Salvar Configurações
-                                        </button>
-                                        <button type="button" class="btn btn-outline-secondary" onclick="testarConexaoBanco()">
-                                            <i class="bi bi-plug me-1"></i> Testar Conexão
-                                        </button>
-                                    </div>
-                                    <div id="testeConexao" class="mt-3"></div>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Sistema *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="sistema_nome" 
+                               value="<?= htmlspecialchars(SISTEMA_NOME) ?>" 
+                               required>
                     </div>
                     
-                    <!-- LDAP -->
-                    <div class="tab-pane fade" id="ldap" role="tabpanel">
-                        <form method="post" class="needs-validation" novalidate>
-                            <input type="hidden" name="acao" value="salvar_ldap">
-                            
-                            <div class="row g-4">
-                                <div class="col-md-6">
-                                    <label class="form-label">Servidor LDAP *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="ldap_server" 
-                                           value="<?= htmlspecialchars(LDAP_SERVER) ?>" 
-                                           required
-                                           placeholder="ldap://192.168.0.6">
-                                    <small class="form-text text-muted">Ex: ldap://192.168.0.6, ldaps://ldap.empresa.com</small>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Porta *</label>
-                                    <input type="number" 
-                                           class="form-control" 
-                                           name="ldap_port" 
-                                           value="<?= htmlspecialchars(LDAP_PORT) ?>" 
-                                           required>
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Domínio *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="ldap_domain" 
-                                           value="<?= htmlspecialchars(LDAP_DOMAIN) ?>" 
-                                           required
-                                           placeholder="empresa.com.br">
-                                </div>
-                                
-                                <div class="col-md-6">
-                                    <label class="form-label">Base DN *</label>
-                                    <input type="text" 
-                                           class="form-control" 
-                                           name="ldap_base_dn" 
-                                           value="<?= htmlspecialchars(LDAP_BASE_DN) ?>" 
-                                           required
-                                           placeholder="DC=empresa,DC=com,DC=br">
-                                </div>
-                                
-                                <div class="col-12">
-                                    <label class="form-label">Grupo Autorizado (DN Completo) *</label>
-                                    <textarea class="form-control" 
-                                              name="ldap_grupo" 
-                                              rows="3" 
-                                              required><?= htmlspecialchars(LDAP_GRUPO) ?></textarea>
-                                    <small class="form-text text-muted">Distinguished Name completo do grupo que tem acesso</small>
-                                </div>
-                                
-                                <div class="col-12">
-                                    <hr class="my-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="bi bi-save me-1"></i> Salvar Configurações LDAP
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="mb-3">
+                        <label class="form-label">Caminho do Logo</label>
+                        <div class="input-group">
+                            <input type="text" 
+                                   class="form-control" 
+                                   name="empresa_logo" 
+                                   value="<?= htmlspecialchars(EMPRESA_LOGO) ?>"
+                                   placeholder="Ex: assets/img/logo.png">
+                            <button type="button" class="btn btn-outline-secondary" onclick="previewLogo()">
+                                <i class="bi bi-eye me-1"></i> Visualizar
+                            </button>
+                        </div>
+                        <small class="form-text text-muted">Caminho relativo para o arquivo de logo</small>
+                        <div id="logoPreview" class="mt-2"></div>
                     </div>
-                </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Fuso Horário *</label>
+                        <select class="form-select" name="timezone" required>
+                            <?php
+                            $timezones = [
+                                'America/Sao_Paulo' => 'São Paulo',
+                                'America/Manaus' => 'Manaus',
+                                'America/Bahia' => 'Bahia',
+                                'America/Fortaleza' => 'Fortaleza',
+                                'America/Recife' => 'Recife',
+                                'America/Rio_Branco' => 'Rio Branco'
+                            ];
+                            
+                            foreach ($timezones as $tz => $label):
+                            ?>
+                                <option value="<?= $tz ?>" <?= TIMEZONE == $tz ? 'selected' : '' ?>>
+                                    <?= $label ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Salvar Configurações da Empresa
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Configurações do Banco de Dados -->
+        <div class="card border-0 mb-4">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0">
+                    <i class="bi bi-database me-2"></i>
+                    Configurações do Banco de Dados
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="acao" value="salvar_banco">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Host do Banco *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="db_host" 
+                               value="<?= htmlspecialchars(DB_HOST) ?>" 
+                               required
+                               placeholder="localhost">
+                        <small class="form-text text-muted">Ex: localhost, 127.0.0.1, mysql.meuservidor.com</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Banco *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="db_name" 
+                               value="<?= htmlspecialchars(DB_NAME) ?>" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Usuário *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="db_user" 
+                               value="<?= htmlspecialchars(DB_USER) ?>" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Senha</label>
+                        <div class="input-group">
+                            <input type="password" 
+                                   class="form-control" 
+                                   name="db_pass" 
+                                   value="<?= htmlspecialchars(DB_PASS) ?>"
+                                   id="db_pass">
+                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('db_pass')">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Salvar Configurações do Banco
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="testarConexaoBanco()">
+                            <i class="bi bi-plug me-1"></i> Testar Conexão
+                        </button>
+                    </div>
+                    <div id="testeConexao" class="mt-3"></div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Configurações LDAP -->
+        <div class="card border-0">
+            <div class="card-header bg-white border-bottom">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-badge me-2"></i>
+                    Configurações LDAP
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" class="needs-validation" novalidate>
+                    <input type="hidden" name="acao" value="salvar_ldap">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Servidor LDAP *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="ldap_server" 
+                               value="<?= htmlspecialchars(LDAP_SERVER) ?>" 
+                               required
+                               placeholder="ldap://192.168.0.6">
+                        <small class="form-text text-muted">Ex: ldap://192.168.0.6, ldaps://ldap.empresa.com</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Porta *</label>
+                        <input type="number" 
+                               class="form-control" 
+                               name="ldap_port" 
+                               value="<?= htmlspecialchars(LDAP_PORT) ?>" 
+                               required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Domínio *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="ldap_domain" 
+                               value="<?= htmlspecialchars(LDAP_DOMAIN) ?>" 
+                               required
+                               placeholder="empresa.com.br">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Base DN *</label>
+                        <input type="text" 
+                               class="form-control" 
+                               name="ldap_base_dn" 
+                               value="<?= htmlspecialchars(LDAP_BASE_DN) ?>" 
+                               required
+                               placeholder="DC=empresa,DC=com,DC=br">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Grupo Autorizado (DN Completo) *</label>
+                        <textarea class="form-control" 
+                                  name="ldap_grupo" 
+                                  rows="3" 
+                                  required><?= htmlspecialchars(LDAP_GRUPO) ?></textarea>
+                        <small class="form-text text-muted">Distinguished Name completo do grupo que tem acesso</small>
+                    </div>
+                    
+                    <div class="gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Salvar Configurações LDAP
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
