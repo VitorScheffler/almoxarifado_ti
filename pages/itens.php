@@ -298,9 +298,6 @@ ob_start();
                                 <i class="bi bi-x"></i> Cancelar
                             </a>
                         <?php endif; ?>
-                        <a href="itens_cadastrados.php" class="btn btn-outline-info ms-auto">
-                            <i class="bi bi-list-ul"></i> Ver Todos
-                        </a>
                     </div>
                 </div>
             </div>

@@ -191,9 +191,6 @@ ob_start();
                            value="<?= htmlspecialchars($fornecedor['cnpj'] ?? '') ?>"
                            placeholder="00.000.000/0000-00"
                            maxlength="18">
-                    <div class="form-text">
-                        Formato: 00.000.000/0000-00
-                    </div>
                 </div>
                 
                 <div class="col-12">
@@ -216,9 +213,6 @@ ob_start();
                            value="<?= htmlspecialchars($fornecedor['telefone'] ?? '') ?>"
                            placeholder="(00) 00000-0000"
                            maxlength="15">
-                    <div class="form-text">
-                        Formato: (00) 00000-0000
-                    </div>
                 </div>
                 
                 <div class="col-md-6">
@@ -255,9 +249,6 @@ ob_start();
                                 <i class="bi bi-x"></i> Cancelar
                             </a>
                         <?php endif; ?>
-                        <a href="fornecedores_cadastrados.php" class="btn btn-outline-info ms-auto">
-                            <i class="bi bi-list-ul"></i> Ver Todos
-                        </a>
                     </div>
                 </div>
             </div>

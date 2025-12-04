@@ -1,0 +1,15 @@
+{
+    "db_host": "localhost",
+    "db_name": "estoque_ti",
+    "db_user": "root",
+    "db_pass": "Cooper123@",
+    "ldap_server": "ldap://192.168.0.6",
+    "ldap_port": "389",
+    "ldap_domain": "coopershoes.com.br",
+    "ldap_base_dn": "DC=coopershoes,DC=com,DC=br",
+    "ldap_grupo": "CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,OU=Coopershoes,OU=Grupo Coopershoes,DC=coopershoes,DC=com,DC=br",
+    "empresa_nome": "Coopershoes",
+    "sistema_nome": "Almoxarifado TI",
+    "empresa_logo": "../assets/img/Coopershoes.png",
+    "timezone": "America/Sao_Paulo"
+}

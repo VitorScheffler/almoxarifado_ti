@@ -3,7 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-session_start();
+// Inclui config para ter acesso às constantes
+require_once '../includes/config.php';
 
 $mensagem = "";
 
@@ -14,13 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($usuario === '' || $senha === '') {
         $mensagem = "Por favor, preencha todos os campos.";
     } else {
-        $dominio       = "coopershoes.com.br";
-        $servidor_ldap = "ldap://192.168.0.6";
-        $porta_ldap    = 389;
+        // Usa as constantes do config.php
+        $dominio       = LDAP_DOMAIN;
+        $servidor_ldap = LDAP_SERVER;
+        $porta_ldap    = LDAP_PORT;
         $usuario_dn    = "$usuario@$dominio";
+        $base_dn       = LDAP_BASE_DN;
+        $grupo_permitido = LDAP_GRUPO;
 
         try {
-            $conexao = ldap_connect("ldap://192.168.0.6:389");
+            $conexao = ldap_connect("$servidor_ldap:$porta_ldap");
             if (!$conexao) {
                 throw new Exception("Não foi possível conectar ao servidor LDAP.");
             }
@@ -37,11 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     ? "Usuário ou senha inválidos."
                     : "Erro na autenticação. Código: $error_code";
             } else {
-                $base_dn         = "DC=coopershoes,DC=com,DC=br";
-                $grupo_permitido = "CN=Estoque,OU=Grupos,OU=Matriz,OU=RS,OU=Internos,"
-                                 . "OU=Coopershoes,OU=Grupo Coopershoes,"
-                                 . "DC=coopershoes,DC=com,DC=br";
-
                 $filtro = "(sAMAccountName=$usuario)";
                 $busca  = ldap_search($conexao, $base_dn, $filtro, ['memberOf']);
                 $dados  = ldap_get_entries($conexao, $busca);
@@ -82,10 +81,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Almoxarifado TI</title>
+    <title><?= htmlspecialchars(SISTEMA_NOME) ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="shortcut icon" href="../assets/img/Coopershoes.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?= htmlspecialchars(EMPRESA_LOGO) ?>" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
@@ -93,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <div class="card shadow-lg border-0" style="width: 100%; max-width: 400px;">
             <div class="card-header bg-primary text-white text-center py-3">
                 <h4 class="mb-0">
-                    <i class="bi bi-box-seam"></i> Almoxarifado TI
+                    <i class="bi bi-box-seam"></i> <?= htmlspecialchars(SISTEMA_NOME) ?>
                 </h4>
             </div>
             <div class="card-body p-4">
@@ -161,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="card-footer text-center py-3">
                 <small class="text-muted">
                     <i class="bi bi-shield-check"></i> 
-                    Sistema de almoxarifado - Coopershoes
+                    <?= htmlspecialchars(EMPRESA_NOME) ?>
                 </small>
             </div>
         </div>

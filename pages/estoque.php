@@ -239,7 +239,7 @@ ob_start();
                     </thead>
                     <tbody>
                         <?php foreach ($itens as $i): ?>
-                            <tr class="<?= $i['alerta'] ? 'table-warning' : '' ?>">
+                            <tr>
                                 <td><?= htmlspecialchars($i['nome']) ?></td>
                                 <td><?= !empty($i['codigo_interno']) ? htmlspecialchars($i['codigo_interno']) : '<span class="text-muted">-</span>' ?></td>
                                 <td>
