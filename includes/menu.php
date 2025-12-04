@@ -106,9 +106,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link <?= ($pagina_atual ?? '') == 'configuracoes.php' ? 'active' : '' ?>" 
-               href="configuracoes.php">
-                <i class="bi bi-gear"></i> Configurações
+            <a class="nav-link <?= ($pagina_atual ?? '') == 'gerenciamento.php' ? 'active' : '' ?>" 
+               href="gerenciamento.php">
+                <i class="bi bi-gear"></i> Gerenciamento
             </a>
         </li>
 
